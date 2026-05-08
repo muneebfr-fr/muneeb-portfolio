@@ -86,7 +86,7 @@ export default function Hero() {
           fontFamily: "var(--font-dm-mono)", fontSize: 10,
           letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--accent)",
         }}>
-          Portfolio · 2025
+          Portfolio · 2026
         </span>
         <span style={{
           fontFamily: "var(--font-dm-mono)", fontSize: 10,

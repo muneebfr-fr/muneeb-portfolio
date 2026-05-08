@@ -147,7 +147,7 @@ export default function Contact() {
             color: "var(--text-muted)",
           }}
         >
-          © 2025 Muhammad Muneeb Kashif
+          © 2026 Muhammad Muneeb Kashif
         </span>
         <span
           style={{
