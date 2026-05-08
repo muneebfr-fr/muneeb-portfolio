@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens ─────────────────────────────────────────────── */
+:root {
+  --bg-base:        #09090C;
+  --bg-surface:     #111115;
+  --bg-elevated:    #1A1A20;
+  --text-primary:   #F0EEE8;
+  --text-secondary: #7A7975;
+  --text-muted:     #4A4946;
+  --accent:         #00C2A8;
+  --accent-glow:    rgba(0, 194, 168, 0.12);
+  --accent-glow-lg: rgba(0, 194, 168, 0.06);
+  --border:         rgba(240, 238, 232, 0.06);
+  --border-accent:  rgba(0, 194, 168, 0.30);
+}
+
+/* ─── Base Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: auto; }
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Film grain overlay — tactile depth */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* ─── Dot Grid ───────────────────────────────────────────────────── */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(240,238,232,0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ─── Glass ──────────────────────────────────────────────────────── */
+.glass {
+  background: rgba(26, 26, 32, 0.65);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid var(--border);
+}
+
+/* ─── Shimmer top edge ───────────────────────────────────────────── */
+.shimmer-top {
+  position: relative;
+}
+.shimmer-top::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(0,194,168,0.45), transparent);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ─── Accent gradient text ───────────────────────────────────────── */
+.accent-text {
+  background: linear-gradient(135deg, #00C2A8 0%, #00E5D0 50%, #00C2A8 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-sweep 6s linear infinite;
+}
+
+/* ─── Metallic card surface ──────────────────────────────────────── */
+.metallic-card {
+  background: linear-gradient(
+    145deg,
+    rgba(0,194,168,0.03) 0%,
+    rgba(17,17,21,0.95) 30%,
+    rgba(26,26,32,0.88) 70%,
+    rgba(240,238,232,0.015) 100%
+  );
+  border: 1px solid var(--border);
+}
+
+/* ─── Section divider ────────────────────────────────────────────── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(0,194,168,0.18),
+    rgba(240,238,232,0.06),
+    rgba(0,194,168,0.18),
+    transparent
+  );
+}
+
+/* ─── Animated gradient border ───────────────────────────────────── */
+@property --beam-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.grad-border-wrap { position: relative; border-radius: inherit; }
+.grad-border-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 40%,
+    rgba(0,194,168,0.55) 55%,
+    rgba(0,226,202,0.40) 60%,
+    transparent 72%
+  );
+  z-index: -1;
+  animation: beam-spin 6s linear infinite;
+  animation-play-state: paused;
+}
+.grad-border-wrap:hover .grad-border-glow {
+  animation-play-state: running;
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────────── */
+@keyframes shimmer-sweep {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes beam-spin {
+  to { --beam-angle: 360deg; }
+}
+
+@keyframes float-a {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-14px) rotate(0.5deg); }
+}
+
+@keyframes float-b {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes drift {
+  0%   { transform: translate(0px, 0px); }
+  25%  { transform: translate(5px, -6px); }
+  50%  { transform: translate(-4px, 4px); }
+  75%  { transform: translate(6px, 2px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.8; }
+}
+
+@keyframes scan-line {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* ─── Animated classes ───────────────────────────────────────────── */
+.animate-marquee         { animation: marquee 32s linear infinite; }
+.animate-marquee-reverse { animation: marquee-reverse 26s linear infinite; }
+.animate-float-a         { animation: float-a 7s ease-in-out infinite; }
+.animate-float-b         { animation: float-b 5s ease-in-out infinite; }
+.animate-drift           { animation: drift 10s ease-in-out infinite; }
+.animate-pulse-glow      { animation: pulse-glow 3s ease-in-out infinite; }
+
+/* ─── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 2px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 9999px; }
+
+/* ─── Selection ──────────────────────────────────────────────────── */
+::selection {
+  background: rgba(0, 194, 168, 0.22);
+  color: var(--text-primary);
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
