@@ -99,7 +99,7 @@ export default function Contact() {
           {/* Social links */}
           <div style={{ display: "flex", justifyContent: "center", gap: 32 }}>
             {[
-              { label: "LinkedIn", href: "https://linkedin.com/in/muneeb-kashif" },
+              { label: "LinkedIn", href: "https://www.linkedin.com/in/muneeb-kashif-443050331/" },
               { label: "GitHub", href: "https://github.com/muneebkashif" },
             ].map((link) => (
               <a
