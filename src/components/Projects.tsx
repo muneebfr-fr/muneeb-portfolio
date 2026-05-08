@@ -14,6 +14,7 @@ const projects = [
     outcome: "Live in production · MK Properties Ajman",
     visual: "db",
     accent: "#00C2A8",
+    link: "https://mkpropertiesinventory.com/guest",
   },
   {
     id: "02",
@@ -26,9 +27,23 @@ const projects = [
     outcome: "Production deployment · UAE artisan brand",
     visual: "ecom",
     accent: "#D4637A",
+    link: "https://whereartmeetsglow.com",
   },
   {
     id: "03",
+    title: "Luxus Glass USA",
+    type: "E-Commerce Platform",
+    role: "UI/UX Designer + Developer",
+    tags: ["Next.js", "Tailwind CSS", "Framer Motion", "E-Commerce", "Design System"],
+    description:
+      "Premium glass and luxury home decor e-commerce for the US market. High-end editorial design language, product showcase with immersive visual hierarchy, and a seamless shopping experience built for conversion.",
+    outcome: "Live in production · US market",
+    visual: "luxus",
+    accent: "#C4965A",
+    link: "https://luxusglassusa.com",
+  },
+  {
+    id: "04",
     title: "Studentopia",
     type: "Campus Super-App",
     role: "Full-Stack Developer",
@@ -38,9 +53,10 @@ const projects = [
     outcome: "In development · Pakistan university market",
     visual: "platform",
     accent: "#6366F1",
+    link: null,
   },
   {
-    id: "04",
+    id: "05",
     title: "Lead Farming Pipeline",
     type: "Data Engineering",
     role: "Solo Developer",
@@ -50,9 +66,10 @@ const projects = [
     outcome: "Live pipeline · Real estate vertical",
     visual: "pipeline",
     accent: "#00C2A8",
+    link: null,
   },
   {
-    id: "05",
+    id: "06",
     title: "Transport Management System",
     type: "Logistics Platform",
     role: "Team Developer",
@@ -62,6 +79,7 @@ const projects = [
     outcome: "Team delivery · US logistics client",
     visual: "network",
     accent: "#00C2A8",
+    link: null,
   },
 ];
 
@@ -267,9 +285,51 @@ function NetworkViz() {
   );
 }
 
+function LuxusViz() {
+  // Premium glass / luxury editorial abstract
+  const panels = [
+    { x: 20,  y: 20, w: 120, h: 120, color: "#C4965A" },
+    { x: 160, y: 40, w: 80,  h: 80,  color: "#C4965A" },
+    { x: 260, y: 20, w: 100, h: 120, color: "#C4965A" },
+    { x: 380, y: 35, w: 80,  h: 90,  color: "#C4965A" },
+  ];
+  return (
+    <svg viewBox="0 0 490 160" style={{ width: "100%", height: "100%" }}>
+      <defs>
+        <linearGradient id="gold-grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#C4965A" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="#F5D78E" stopOpacity="0.06" />
+        </linearGradient>
+      </defs>
+      {panels.map((p, i) => (
+        <motion.g key={i}
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22,1,0.36,1] as [number,number,number,number] }}
+          viewport={{ once: true }}
+        >
+          <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={4}
+            fill="url(#gold-grad)" stroke={`${p.color}40`} strokeWidth={1} />
+          {/* glass highlight */}
+          <rect x={p.x+4} y={p.y+4} width={p.w*0.45} height={p.h*0.3} rx={2}
+            fill={`${p.color}12`} />
+        </motion.g>
+      ))}
+      {/* Thin horizontal rule — editorial feel */}
+      <motion.path d="M20,148 L470,148" stroke="rgba(196,150,90,0.25)" strokeWidth={1} fill="none"
+        initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }}
+        transition={{ delay: 0.5, duration: 0.8 }} viewport={{ once: true }}
+      />
+      <text x="245" y="143" textAnchor="middle" fill="rgba(196,150,90,0.5)"
+        fontSize={8} fontFamily="monospace" letterSpacing="4">LUXUS GLASS USA</text>
+    </svg>
+  );
+}
+
 const vizMap: Record<string, React.ReactNode> = {
   db: <DBViz />,
   ecom: <EcomViz />,
+  luxus: <LuxusViz />,
   platform: <PlatformViz />,
   pipeline: <PipelineViz />,
   network: <NetworkViz />,
@@ -363,11 +423,39 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         </div>
 
         <div style={{
-          fontFamily: "var(--font-dm-mono)", fontSize: 9,
-          letterSpacing: "0.14em", color: "var(--accent)", opacity: 0.65,
-          paddingTop: 14, borderTop: "1px solid var(--border)",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          gap: 12, paddingTop: 14, borderTop: "1px solid var(--border)", flexWrap: "wrap",
         }}>
-          {project.outcome}
+          <div style={{
+            fontFamily: "var(--font-dm-mono)", fontSize: 9,
+            letterSpacing: "0.14em", color: "var(--accent)", opacity: 0.65,
+          }}>
+            {project.outcome}
+          </div>
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+              style={{
+                fontFamily: "var(--font-dm-mono)", fontSize: 9,
+                letterSpacing: "0.18em", textTransform: "uppercase",
+                color: "var(--accent)", border: "1px solid rgba(0,194,168,0.3)",
+                padding: "4px 12px", borderRadius: 2, textDecoration: "none",
+                whiteSpace: "nowrap", transition: "background 0.2s, color 0.2s",
+                flexShrink: 0,
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(0,194,168,0.1)";
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.background = "transparent";
+              }}
+            >
+              Visit Site ↗
+            </a>
+          )}
         </div>
       </div>
     </motion.article>
