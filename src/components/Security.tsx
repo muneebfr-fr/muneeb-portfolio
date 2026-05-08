@@ -50,29 +50,27 @@ const frameworks = [
   "Google Cybersecurity Certificate",
 ];
 
-// Attack graph for the case study
 function AttackGraph() {
   const nodes = [
-    { id: "actor", x: 55, y: 100, label: "IRGC", color: "#ef4444" },
-    { id: "recon", x: 180, y: 60, label: "Shodan\nRecon", color: "#f97316" },
-    { id: "creds", x: 180, y: 140, label: "Default\nCreds", color: "#f97316" },
-    { id: "plc", x: 320, y: 100, label: "Unitronics\nPLC", color: "#00C2A8" },
-    { id: "hmi", x: 440, y: 100, label: "HMI\nDefaced", color: "#ef4444" },
+    { id: "actor", x: 50,  y: 90,  label: "IRGC",       color: "#ef4444" },
+    { id: "recon", x: 170, y: 50,  label: "Shodan\nRecon", color: "#f97316" },
+    { id: "creds", x: 170, y: 130, label: "Default\nCreds", color: "#f97316" },
+    { id: "plc",   x: 300, y: 90,  label: "Unitronics\nPLC", color: "#00C2A8" },
+    { id: "hmi",   x: 420, y: 90,  label: "HMI\nDefaced",   color: "#ef4444" },
   ];
-  const edges = [[0,1],[0,2],[1,3],[2,3],[3,4]];
+  const edgePairs: [number,number][] = [[0,1],[0,2],[1,3],[2,3],[3,4]];
 
   return (
-    <svg viewBox="0 0 500 200" style={{ width: "100%", height: 160 }}>
+    <svg viewBox="0 0 490 180" style={{ width: "100%", height: 160 }}>
       <defs>
         <marker id="arr" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
           <path d="M0,0 L5,2.5 L0,5 Z" fill="rgba(239,68,68,0.45)" />
         </marker>
       </defs>
-      {edges.map(([a,b],i) => (
-        <motion.line key={i}
-          x1={nodes[a].x+30} y1={nodes[a].y}
-          x2={nodes[b].x-30} y2={nodes[b].y}
-          stroke="rgba(239,68,68,0.25)" strokeWidth={1}
+      {edgePairs.map(([a,b],i) => (
+        <motion.path key={i}
+          d={`M${nodes[a].x+30},${nodes[a].y} L${nodes[b].x-30},${nodes[b].y}`}
+          stroke="rgba(239,68,68,0.25)" strokeWidth={1} fill="none"
           markerEnd="url(#arr)"
           initial={{ pathLength: 0, opacity: 0 }}
           whileInView={{ pathLength: 1, opacity: 1 }}
@@ -92,7 +90,7 @@ function AttackGraph() {
             fill={`${n.color}10`} stroke={`${n.color}50`} strokeWidth={1} />
           {n.label.split("\n").map((line, li) => (
             <text key={li} x={n.x} y={n.y - 5 + li * 14} textAnchor="middle"
-              fill={n.color} fontSize={9} fontFamily="var(--font-dm-mono)">{line}</text>
+              fill={n.color} fontSize={9} fontFamily="monospace">{line}</text>
           ))}
         </motion.g>
       ))}
@@ -110,14 +108,13 @@ export default function Security() {
       id="security"
       ref={ref}
       style={{
-        padding: "clamp(80px, 12vw, 140px) clamp(24px, 5vw, 80px)",
+        padding: "clamp(64px, 12vw, 140px) clamp(20px, 5vw, 80px)",
         position: "relative",
       }}
     >
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
-        {/* Section header */}
-        <motion.div style={{ y: headerY, marginBottom: "clamp(48px, 7vw, 80px)" }}>
+        <motion.div style={{ y: headerY, marginBottom: "clamp(40px, 7vw, 80px)" }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 24, marginBottom: 20, flexWrap: "wrap" }}>
             <span style={{
               fontFamily: "var(--font-dm-mono)", fontSize: 10,
@@ -129,7 +126,7 @@ export default function Security() {
           </div>
           <h2 style={{
             fontFamily: "var(--font-syne)", fontWeight: 700,
-            fontSize: "clamp(32px, 5vw, 60px)", color: "var(--text-primary)",
+            fontSize: "clamp(28px, 5vw, 60px)", color: "var(--text-primary)",
             lineHeight: 1.05, letterSpacing: "-0.02em",
           }}>
             Security <span style={{ color: "var(--accent)" }}>Arsenal</span>
@@ -147,7 +144,7 @@ export default function Security() {
         {/* Capabilities grid */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 340px), 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))",
           gap: 1,
           border: "1px solid var(--border)",
           borderRadius: 8,
@@ -159,10 +156,10 @@ export default function Security() {
               key={cap.area}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "-40px" }}
+              viewport={{ once: true }}
               transition={{ delay: i * 0.06, duration: 0.5 }}
               style={{
-                padding: "28px 28px 24px",
+                padding: "clamp(20px, 3vw, 28px)",
                 background: "var(--bg-surface)",
                 borderRight: "1px solid var(--border)",
                 borderBottom: "1px solid var(--border)",
@@ -171,25 +168,20 @@ export default function Security() {
               }}
               whileHover={{ background: "rgba(17,17,21,0.98)" }}
             >
-              {/* Proficiency bar — subtle, top edge */}
               <motion.div
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.3 + i * 0.06, duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+                transition={{ delay: 0.3 + i * 0.06, duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
                 style={{
                   position: "absolute", top: 0, left: 0,
-                  height: 2,
-                  width: `${cap.level}%`,
-                  background: "var(--accent)",
-                  opacity: 0.6,
-                  transformOrigin: "left",
+                  height: 2, width: `${cap.level}%`,
+                  background: "var(--accent)", opacity: 0.6, transformOrigin: "left",
                 }}
               />
-
               <div style={{
                 fontFamily: "var(--font-syne)", fontWeight: 600,
-                fontSize: 14, color: "var(--text-primary)",
+                fontSize: "clamp(13px, 1.5vw, 14px)", color: "var(--text-primary)",
                 marginBottom: 10, letterSpacing: "-0.01em",
               }}>
                 {cap.area}
@@ -205,8 +197,7 @@ export default function Security() {
                 {cap.tools.map(t => (
                   <span key={t} style={{
                     fontFamily: "var(--font-dm-mono)", fontSize: 9,
-                    letterSpacing: "0.12em", color: "var(--accent)",
-                    opacity: 0.65,
+                    letterSpacing: "0.12em", color: "var(--accent)", opacity: 0.65,
                   }}>
                     {t}
                   </span>
@@ -230,8 +221,7 @@ export default function Security() {
           <span style={{
             fontFamily: "var(--font-dm-mono)", fontSize: 9,
             letterSpacing: "0.22em", textTransform: "uppercase",
-            color: "var(--text-muted)", marginRight: 8,
-            alignSelf: "center",
+            color: "var(--text-muted)", marginRight: 8, alignSelf: "center",
           }}>
             Frameworks:
           </span>
@@ -246,21 +236,19 @@ export default function Security() {
           ))}
         </motion.div>
 
-        {/* Case study — condensed, proof not centerpiece */}
+        {/* Case study */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
           style={{
             border: "1px solid rgba(239,68,68,0.15)",
-            borderRadius: 8,
-            overflow: "hidden",
+            borderRadius: 8, overflow: "hidden",
           }}
         >
-          {/* Header bar */}
           <div style={{
-            padding: "14px 28px",
+            padding: "14px clamp(16px, 3vw, 28px)",
             borderBottom: "1px solid rgba(239,68,68,0.1)",
             display: "flex", justifyContent: "space-between",
             alignItems: "center", flexWrap: "wrap", gap: 12,
@@ -288,26 +276,22 @@ export default function Security() {
           </div>
 
           <div style={{
-            padding: "clamp(24px, 4vw, 40px)",
+            padding: "clamp(20px, 4vw, 40px)",
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 40,
-          }}
-          className="case-study-grid"
-          >
-            {/* Left: description */}
+            gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
+            gap: "clamp(20px, 3vw, 40px)",
+          }}>
             <div>
               <h3 style={{
                 fontFamily: "var(--font-syne)", fontWeight: 700,
-                fontSize: "clamp(18px, 2.5vw, 26px)", color: "var(--text-primary)",
+                fontSize: "clamp(17px, 2.5vw, 26px)", color: "var(--text-primary)",
                 marginBottom: 12, letterSpacing: "-0.01em",
               }}>
                 IRGC-Affiliated Attack on US Water Infrastructure
               </h3>
               <p style={{
                 fontFamily: "var(--font-dm-sans)", fontWeight: 300,
-                fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.8,
-                marginBottom: 20,
+                fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.8, marginBottom: 20,
               }}>
                 Analyzed CyberAv3ngers campaign targeting Unitronics Vision PLCs across US
                 water treatment facilities. Mapped full attack chain from Shodan reconnaissance
@@ -327,22 +311,17 @@ export default function Security() {
               </div>
             </div>
 
-            {/* Right: attack graph */}
             <div style={{
               background: "rgba(9,9,12,0.6)",
               border: "1px solid rgba(239,68,68,0.1)",
               borderRadius: 6, padding: 20,
               display: "flex", alignItems: "center", justifyContent: "center",
+              minHeight: 160,
             }}>
               <AttackGraph />
             </div>
           </div>
         </motion.div>
-
-        {/* Responsive fix for case study grid */}
-        <style>{`
-          @media (max-width: 640px) { .case-study-grid { grid-template-columns: 1fr !important; } }
-        `}</style>
       </div>
     </section>
   );

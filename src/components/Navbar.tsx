@@ -178,9 +178,9 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.08 + i * 0.06, ease: [0.22, 1, 0.36, 1], duration: 0.5 }}
                   style={{
-                    fontFamily: "var(--font-cormorant)",
+                    fontFamily: "var(--font-syne)",
                     fontSize: "clamp(2rem, 8vw, 3.5rem)",
-                    fontWeight: 300,
+                    fontWeight: 700,
                     color: "var(--text-primary)",
                     textDecoration: "none",
                     letterSpacing: "0.02em",

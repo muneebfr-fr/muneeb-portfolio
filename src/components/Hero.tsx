@@ -29,10 +29,7 @@ export default function Hero() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.75,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-      },
+      transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
     },
   };
 
@@ -48,7 +45,7 @@ export default function Hero() {
         justifyContent: "flex-end",
         overflowX: "hidden",
         overflowY: "visible",
-        padding: "0 clamp(24px, 5vw, 72px)",
+        padding: "0 clamp(20px, 5vw, 72px)",
         paddingBottom: "clamp(48px, 7vw, 80px)",
       }}
     >
@@ -56,15 +53,13 @@ export default function Hero() {
       <motion.div
         style={{
           opacity: gridOpacity,
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
+          position: "absolute", inset: 0, pointerEvents: "none",
           backgroundImage: "radial-gradient(circle, rgba(240,238,232,0.055) 1px, transparent 1px)",
           backgroundSize: "32px 32px",
         }}
       />
 
-      {/* Corner glow top right */}
+      {/* Corner glow */}
       <div style={{
         position: "absolute", top: 0, right: 0,
         width: "35vw", height: "35vw",
@@ -80,8 +75,8 @@ export default function Hero() {
         style={{
           position: "absolute",
           top: 80,
-          left: "clamp(24px, 5vw, 72px)",
-          right: "clamp(24px, 5vw, 72px)",
+          left: "clamp(20px, 5vw, 72px)",
+          right: "clamp(20px, 5vw, 72px)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -101,10 +96,10 @@ export default function Hero() {
         </span>
       </motion.div>
 
-      {/* Vertical accent line */}
-      <div style={{
+      {/* Vertical accent line — hidden on mobile */}
+      <div className="hero-accent-line" style={{
         position: "absolute",
-        left: "clamp(24px, 5vw, 72px)",
+        left: "clamp(20px, 5vw, 72px)",
         top: "14%",
         bottom: "clamp(48px, 7vw, 80px)",
         width: 1,
@@ -112,9 +107,9 @@ export default function Hero() {
       }} />
 
       {/* Main content */}
-      <div style={{ position: "relative", zIndex: 10, paddingLeft: "clamp(28px, 3.5vw, 44px)" }}>
+      <div style={{ position: "relative", zIndex: 10, paddingLeft: "clamp(16px, 3.5vw, 44px)" }}>
 
-        {/* Role line above name */}
+        {/* Role eyebrow */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -122,9 +117,8 @@ export default function Hero() {
           style={{ marginBottom: 12 }}
         >
           <span style={{
-            fontFamily: "var(--font-dm-mono)", fontSize: 11,
-            letterSpacing: "0.28em", textTransform: "uppercase",
-            color: "var(--text-muted)",
+            fontFamily: "var(--font-dm-mono)", fontSize: "clamp(9px, 1.5vw, 11px)",
+            letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--text-muted)",
           }}>
             Developer · Designer · Security Researcher
           </span>
@@ -147,9 +141,9 @@ export default function Hero() {
                 display: "block",
                 fontFamily: "var(--font-syne)",
                 fontWeight: 800,
-                fontSize: "clamp(44px, 7.5vw, 108px)",
+                fontSize: "clamp(36px, 7.5vw, 108px)",
                 letterSpacing: "-0.03em",
-                lineHeight: 0.91,
+                lineHeight: 0.92,
                 color: accent ? "var(--accent)" : "var(--text-primary)",
                 whiteSpace: "nowrap",
               }}>
@@ -169,26 +163,23 @@ export default function Hero() {
           <div style={{
             height: 1,
             background: "var(--border)",
-            margin: "clamp(28px, 4vw, 48px) 0 clamp(20px, 3vw, 32px)",
-            maxWidth: "80vw",
+            margin: "clamp(24px, 4vw, 48px) 0 clamp(20px, 3vw, 32px)",
+            maxWidth: "90vw",
           }} />
 
           <div style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "flex-start",
             flexWrap: "wrap",
-            gap: 24,
+            gap: "clamp(24px, 4vw, 40px)",
           }}>
-            {/* Left side */}
-            <div style={{ maxWidth: 440 }}>
+            {/* Left — bio + CTAs */}
+            <div style={{ maxWidth: 440, minWidth: 0, flex: "1 1 280px" }}>
               <p style={{
-                fontFamily: "var(--font-dm-sans)",
-                fontWeight: 300,
-                fontSize: "clamp(14px, 1.7vw, 16px)",
-                color: "var(--text-secondary)",
-                lineHeight: 1.85,
-                marginBottom: 28,
+                fontFamily: "var(--font-dm-sans)", fontWeight: 300,
+                fontSize: "clamp(13px, 1.7vw, 16px)", color: "var(--text-secondary)",
+                lineHeight: 1.85, marginBottom: 24,
               }}>
                 Full-stack developer and UI/UX designer, cybersecurity major at UOWD Dubai.
                 Ships production software, secures systems, and has operated with AED 13M+
@@ -214,8 +205,8 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Right side — credential tags */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 7, alignItems: "flex-end" }}>
+            {/* Right — credential tags */}
+            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 7, flex: "0 1 auto" }}>
               {credentials.map((c, i) => (
                 <motion.span
                   key={c}
@@ -246,10 +237,11 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.0, duration: 0.6 }}
+        className="hero-scroll-hint"
         style={{
           position: "absolute",
           bottom: "clamp(48px, 7vw, 80px)",
-          right: "clamp(24px, 5vw, 72px)",
+          right: "clamp(20px, 5vw, 72px)",
           display: "flex", alignItems: "center", gap: 12,
         }}
       >
@@ -265,6 +257,13 @@ export default function Hero() {
           style={{ width: 24, height: 1, background: "var(--accent)", opacity: 0.5 }}
         />
       </motion.div>
+
+      <style>{`
+        @media (max-width: 480px) {
+          .hero-accent-line { display: none; }
+          .hero-scroll-hint { display: none; }
+        }
+      `}</style>
     </section>
   );
 }

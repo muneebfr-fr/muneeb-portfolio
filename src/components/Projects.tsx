@@ -67,20 +67,27 @@ const projects = [
 
 function DBViz() {
   const nodes = [
-    { x: 40, y: 70, w: 90, label: "properties" },
-    { x: 180, y: 30, w: 70, label: "units" },
-    { x: 180, y: 110, w: 70, label: "owners" },
-    { x: 310, y: 70, w: 110, label: "transactions" },
-    { x: 480, y: 50, w: 80, label: "reports" },
-    { x: 480, y: 110, w: 70, label: "users" },
+    { x: 20,  y: 70, w: 90,  label: "properties" },
+    { x: 160, y: 24, w: 70,  label: "units" },
+    { x: 160, y: 108, w: 70, label: "owners" },
+    { x: 290, y: 70, w: 100, label: "transactions" },
+    { x: 450, y: 40, w: 70,  label: "reports" },
+    { x: 450, y: 108, w: 65, label: "users" },
   ];
-  const edges = [[0,1],[0,2],[1,3],[2,3],[3,4],[3,5]];
+  const edges = [
+    [nodes[0].x+nodes[0].w, nodes[0].y+16, nodes[1].x, nodes[1].y+16],
+    [nodes[0].x+nodes[0].w, nodes[0].y+16, nodes[2].x, nodes[2].y+16],
+    [nodes[1].x+nodes[1].w, nodes[1].y+16, nodes[3].x, nodes[3].y+16],
+    [nodes[2].x+nodes[2].w, nodes[2].y+16, nodes[3].x, nodes[3].y+16],
+    [nodes[3].x+nodes[3].w, nodes[3].y+16, nodes[4].x, nodes[4].y+16],
+    [nodes[3].x+nodes[3].w, nodes[3].y+16, nodes[5].x, nodes[5].y+16],
+  ];
   return (
-    <svg viewBox="0 0 580 180" style={{ width: "100%", height: "100%" }}>
-      {edges.map(([a,b],i) => (
-        <motion.line key={i} x1={nodes[a].x+nodes[a].w} y1={nodes[a].y+16}
-          x2={nodes[b].x} y2={nodes[b].y+16}
-          stroke="rgba(0,194,168,0.3)" strokeWidth={1}
+    <svg viewBox="0 0 560 160" style={{ width: "100%", height: "100%" }}>
+      {edges.map(([x1,y1,x2,y2],i) => (
+        <motion.path key={i}
+          d={`M${x1},${y1} L${x2},${y2}`}
+          stroke="rgba(0,194,168,0.3)" strokeWidth={1} fill="none"
           initial={{ pathLength: 0, opacity: 0 }}
           whileInView={{ pathLength: 1, opacity: 1 }}
           transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
@@ -96,7 +103,7 @@ function DBViz() {
           <rect x={n.x} y={n.y} width={n.w} height={32} rx={3}
             fill="rgba(26,26,32,0.9)" stroke="rgba(0,194,168,0.3)" strokeWidth={1} />
           <text x={n.x + n.w/2} y={n.y+21} textAnchor="middle"
-            fill="var(--text-secondary)" fontSize={9} fontFamily="var(--font-dm-mono)">{n.label}</text>
+            fill="rgba(122,121,117,1)" fontSize={9} fontFamily="monospace">{n.label}</text>
         </motion.g>
       ))}
     </svg>
@@ -104,40 +111,38 @@ function DBViz() {
 }
 
 function EcomViz() {
-  // Bloom Glass abstract — warm palette, product cards
   const products = [
-    { x: 30, y: 20, w: 100, h: 130, color: "#D4637A", label: "Candle" },
-    { x: 150, y: 40, w: 100, h: 110, color: "#C4965A", label: "Resin Art" },
-    { x: 270, y: 20, w: 100, h: 130, color: "#8BAF8A", label: "Crochet" },
-    { x: 390, y: 40, w: 100, h: 110, color: "#B49BC8", label: "Flowers" },
+    { x: 20,  y: 15, w: 95, h: 120, color: "#D4637A", label: "Candle" },
+    { x: 130, y: 30, w: 95, h: 100, color: "#C4965A", label: "Resin Art" },
+    { x: 240, y: 15, w: 95, h: 120, color: "#8BAF8A", label: "Crochet" },
+    { x: 350, y: 30, w: 95, h: 100, color: "#B49BC8", label: "Flowers" },
   ];
   return (
-    <svg viewBox="0 0 520 180" style={{ width: "100%", height: "100%" }}>
+    <svg viewBox="0 0 480 160" style={{ width: "100%", height: "100%" }}>
       {products.map((p,i) => (
         <motion.g key={i}
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+          transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22,1,0.36,1] as [number,number,number,number] }}
           viewport={{ once: true }}
         >
-          <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={6}
+          <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={5}
             fill={`${p.color}14`} stroke={`${p.color}45`} strokeWidth={1} />
-          <circle cx={p.x + p.w/2} cy={p.y + p.h/2 - 15} r={22}
+          <circle cx={p.x + p.w/2} cy={p.y + p.h/2 - 10} r={20}
             fill={`${p.color}20`} stroke={`${p.color}40`} strokeWidth={1} />
-          <text x={p.x + p.w/2} y={p.y + p.h - 12} textAnchor="middle"
-            fill={p.color} fontSize={9} fontFamily="var(--font-dm-mono)" opacity={0.8}>{p.label}</text>
+          <text x={p.x + p.w/2} y={p.y + p.h - 10} textAnchor="middle"
+            fill={p.color} fontSize={9} fontFamily="monospace" opacity={0.9}>{p.label}</text>
         </motion.g>
       ))}
-      {/* Cart indicator */}
-      <motion.rect x={170} y={155} width={160} height={18} rx={9}
+      <motion.rect x={130} y={143} width={160} height={14} rx={7}
         fill="rgba(212,99,122,0.15)" stroke="rgba(212,99,122,0.4)" strokeWidth={1}
         initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }}
         transition={{ delay: 0.5, duration: 0.6 }}
         viewport={{ once: true }}
-        style={{ transformOrigin: "250px 164px" }}
+        style={{ transformOrigin: "210px 150px" }}
       />
-      <text x={250} y={167} textAnchor="middle"
-        fill="rgba(212,99,122,0.7)" fontSize={8} fontFamily="var(--font-dm-mono)">
+      <text x={210} y={153} textAnchor="middle"
+        fill="rgba(212,99,122,0.8)" fontSize={8} fontFamily="monospace">
         Add to Cart
       </text>
     </svg>
@@ -146,12 +151,12 @@ function EcomViz() {
 
 function PlatformViz() {
   const panels = [
-    { x: 10, y: 10, w: 140, h: 160, label: "Jobs / ATS" },
-    { x: 165, y: 10, w: 160, h: 160, label: "Marketplace" },
-    { x: 340, y: 10, w: 160, h: 160, label: "Mentor Hub" },
+    { x: 8,   y: 8,  w: 138, h: 144, label: "Jobs / ATS",  color: "rgba(99,102,241,0.25)" },
+    { x: 160, y: 8,  w: 138, h: 144, label: "Marketplace", color: "rgba(99,102,241,0.25)" },
+    { x: 312, y: 8,  w: 138, h: 144, label: "Mentor Hub",  color: "rgba(99,102,241,0.25)" },
   ];
   return (
-    <svg viewBox="0 0 520 180" style={{ width: "100%", height: "100%" }}>
+    <svg viewBox="0 0 462 160" style={{ width: "100%", height: "100%" }}>
       {panels.map((p,i) => (
         <motion.g key={i}
           initial={{ opacity: 0 }}
@@ -160,19 +165,19 @@ function PlatformViz() {
           viewport={{ once: true }}
         >
           <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={4}
-            fill="rgba(26,26,32,0.9)" stroke="rgba(99,102,241,0.25)" strokeWidth={1} />
-          <rect x={p.x} y={p.y} width={p.w} height={28} rx={4}
-            fill="rgba(99,102,241,0.1)" stroke="none" />
-          <text x={p.x + p.w/2} y={p.y + 18} textAnchor="middle"
-            fill="rgba(99,102,241,0.8)" fontSize={9} fontFamily="var(--font-dm-mono)">{p.label}</text>
-          {[40, 60, 80, 100, 120].map((y, j) => (
-            <motion.rect key={j} x={p.x+10} y={p.y+y} width={p.w-20} height={8} rx={2}
-              fill="rgba(240,238,232,0.04)"
+            fill="rgba(26,26,32,0.9)" stroke={p.color} strokeWidth={1} />
+          <rect x={p.x} y={p.y} width={p.w} height={24} rx={4}
+            fill="rgba(99,102,241,0.1)" />
+          <text x={p.x + p.w/2} y={p.y+16} textAnchor="middle"
+            fill="rgba(99,102,241,0.9)" fontSize={8} fontFamily="monospace">{p.label}</text>
+          {[32, 52, 72, 92, 112].map((y, j) => (
+            <motion.rect key={j} x={p.x+8} y={p.y+y} width={p.w-16} height={7} rx={2}
+              fill="rgba(240,238,232,0.05)"
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
-              transition={{ delay: 0.2 + i * 0.1 + j * 0.04 }}
+              transition={{ delay: 0.2 + i * 0.1 + j * 0.05 }}
               viewport={{ once: true }}
-              style={{ transformOrigin: `${p.x+10}px ${p.y+y}px` }}
+              style={{ transformOrigin: `${p.x+8}px ${p.y+y}px` }}
             />
           ))}
         </motion.g>
@@ -183,34 +188,42 @@ function PlatformViz() {
 
 function PipelineViz() {
   const stages = ["Sources", "Scrape", "Dedupe", "Score", "Route", "CRM"];
+  const boxW = 70;
+  const gap = 14;
+  const total = stages.length * boxW + (stages.length - 1) * gap;
+  const startX = (520 - total) / 2;
   return (
-    <svg viewBox="0 0 560 100" style={{ width: "100%", height: "100%" }}>
-      {stages.map((s,i) => (
-        <motion.g key={s}
-          initial={{ opacity: 0, x: -8 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ delay: i * 0.1, duration: 0.4 }}
-          viewport={{ once: true }}
-        >
-          <rect x={10 + i*90} y={30} width={76} height={36} rx={3}
-            fill="rgba(26,26,32,0.9)" stroke="rgba(0,194,168,0.28)" strokeWidth={1} />
-          <text x={10 + i*90 + 38} y={53} textAnchor="middle"
-            fill="var(--text-secondary)" fontSize={9} fontFamily="var(--font-dm-mono)">{s}</text>
-          {i < stages.length - 1 && (
-            <motion.line x1={86+i*90} y1={48} x2={100+i*90} y2={48}
-              stroke="rgba(0,194,168,0.4)" strokeWidth={1}
-              initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }}
-              transition={{ delay: 0.3 + i * 0.1 }}
-              viewport={{ once: true }}
-              style={{ transformOrigin: `${86+i*90}px 48px` }}
-            />
-          )}
-        </motion.g>
-      ))}
-      {[0,1,2].map(i => (
-        <motion.circle key={i} cx={10} cy={48} r={3} fill="var(--accent)"
-          animate={{ cx: [10, 540, 10] }}
-          transition={{ duration: 4, delay: i * 1.4, repeat: Infinity, ease: "linear" }}
+    <svg viewBox="0 0 520 100" style={{ width: "100%", height: "100%" }}>
+      {stages.map((s,i) => {
+        const x = startX + i * (boxW + gap);
+        return (
+          <motion.g key={s}
+            initial={{ opacity: 0, y: -8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.09, duration: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <rect x={x} y={30} width={boxW} height={34} rx={3}
+              fill="rgba(26,26,32,0.9)" stroke="rgba(0,194,168,0.28)" strokeWidth={1} />
+            <text x={x + boxW/2} y={52} textAnchor="middle"
+              fill="rgba(122,121,117,1)" fontSize={9} fontFamily="monospace">{s}</text>
+            {i < stages.length - 1 && (
+              <motion.path
+                d={`M${x+boxW},47 L${x+boxW+gap},47`}
+                stroke="rgba(0,194,168,0.45)" strokeWidth={1} fill="none"
+                initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }}
+                transition={{ delay: 0.3 + i * 0.09 }}
+                viewport={{ once: true }}
+              />
+            )}
+          </motion.g>
+        );
+      })}
+      {[0, 1, 2].map(i => (
+        <motion.circle key={i} r={3} fill="var(--accent)"
+          animate={{ cx: [startX, startX + total, startX] }}
+          transition={{ duration: 4, delay: i * 1.35, repeat: Infinity, ease: "linear" }}
+          style={{ cy: 47 }}
         />
       ))}
     </svg>
@@ -219,17 +232,18 @@ function PipelineViz() {
 
 function NetworkViz() {
   const hubs = [
-    {x:60,y:90,r:9,label:"HQ"},{x:180,y:50,r:6,label:"WH-A"},
-    {x:180,y:130,r:6,label:"WH-B"},{x:310,y:40,r:5,label:"D-1"},
-    {x:310,y:90,r:5,label:"D-2"},{x:310,y:140,r:5,label:"D-3"},
-    {x:430,y:65,r:4,label:"CLI"},{x:430,y:120,r:4,label:"CLI"},
+    {x:50, y:80,r:9,label:"HQ"},   {x:160,y:42,r:6,label:"WH-A"},
+    {x:160,y:118,r:6,label:"WH-B"},{x:280,y:32,r:5,label:"D-1"},
+    {x:280,y:80,r:5,label:"D-2"},  {x:280,y:128,r:5,label:"D-3"},
+    {x:390,y:56,r:4,label:"CLI"},  {x:390,y:110,r:4,label:"CLI"},
   ];
-  const edges = [[0,1],[0,2],[1,3],[1,4],[2,4],[2,5],[3,6],[4,6],[4,7],[5,7]];
+  const edgePairs = [[0,1],[0,2],[1,3],[1,4],[2,4],[2,5],[3,6],[4,6],[4,7],[5,7]];
   return (
-    <svg viewBox="0 0 500 180" style={{ width: "100%", height: "100%" }}>
-      {edges.map(([a,b],i) => (
-        <motion.line key={i} x1={hubs[a].x} y1={hubs[a].y} x2={hubs[b].x} y2={hubs[b].y}
-          stroke="rgba(0,194,168,0.18)" strokeWidth={1} strokeDasharray="3 3"
+    <svg viewBox="0 0 460 160" style={{ width: "100%", height: "100%" }}>
+      {edgePairs.map(([a,b],i) => (
+        <motion.path key={i}
+          d={`M${hubs[a].x},${hubs[a].y} L${hubs[b].x},${hubs[b].y}`}
+          stroke="rgba(0,194,168,0.2)" strokeWidth={1} strokeDasharray="3 3" fill="none"
           initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }}
           transition={{ delay: i * 0.07, duration: 0.6 }}
           viewport={{ once: true }}
@@ -246,7 +260,7 @@ function NetworkViz() {
           <circle cx={h.x} cy={h.y} r={h.r}
             fill="rgba(0,194,168,0.12)" stroke="rgba(0,194,168,0.55)" strokeWidth={1} />
           <text x={h.x} y={h.y + h.r + 11} textAnchor="middle"
-            fill="var(--text-muted)" fontSize={8} fontFamily="var(--font-dm-mono)">{h.label}</text>
+            fill="rgba(74,73,70,1)" fontSize={8} fontFamily="monospace">{h.label}</text>
         </motion.g>
       ))}
     </svg>
@@ -268,8 +282,8 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
     <motion.article
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.65, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.65, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -289,15 +303,12 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         background: "rgba(9,9,12,0.6)",
         padding: 16,
         overflow: "hidden",
-        transition: "border-color 0.25s ease",
-        borderBottomColor: hovered ? "rgba(0,194,168,0.15)" : "rgba(240,238,232,0.06)",
       }}>
         {vizMap[project.visual]}
       </div>
 
       {/* Content */}
-      <div style={{ padding: "24px 24px 20px" }}>
-        {/* Meta row */}
+      <div style={{ padding: "clamp(16px, 3vw, 24px)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
           <span style={{
             fontFamily: "var(--font-dm-mono)", fontSize: 9,
@@ -317,7 +328,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 
         <h3 style={{
           fontFamily: "var(--font-syne)", fontWeight: 700,
-          fontSize: "clamp(16px, 2vw, 20px)", color: "var(--text-primary)",
+          fontSize: "clamp(15px, 2vw, 19px)", color: "var(--text-primary)",
           lineHeight: 1.25, letterSpacing: "-0.01em", marginBottom: 6,
         }}>
           {project.title}
@@ -325,8 +336,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 
         <div style={{
           fontFamily: "var(--font-dm-mono)", fontSize: 9,
-          letterSpacing: "0.14em", color: "var(--text-muted)",
-          marginBottom: 14,
+          letterSpacing: "0.14em", color: "var(--text-muted)", marginBottom: 14,
         }}>
           {project.type}
         </div>
@@ -339,7 +349,6 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           {project.description}
         </p>
 
-        {/* Tags */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
           {project.tags.map(t => (
             <span key={t} style={{
@@ -353,7 +362,6 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           ))}
         </div>
 
-        {/* Outcome */}
         <div style={{
           fontFamily: "var(--font-dm-mono)", fontSize: 9,
           letterSpacing: "0.14em", color: "var(--accent)", opacity: 0.65,
@@ -375,12 +383,10 @@ export default function Projects() {
     <section
       id="work"
       ref={ref}
-      style={{ padding: "clamp(80px, 12vw, 140px) clamp(24px, 5vw, 80px)", position: "relative" }}
+      style={{ padding: "clamp(64px, 12vw, 140px) clamp(20px, 5vw, 80px)", position: "relative" }}
     >
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-
-        {/* Header */}
-        <motion.div style={{ y: headerY, marginBottom: "clamp(48px, 7vw, 72px)" }}>
+        <motion.div style={{ y: headerY, marginBottom: "clamp(40px, 7vw, 72px)" }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 24, marginBottom: 20, flexWrap: "wrap" }}>
             <span style={{
               fontFamily: "var(--font-dm-mono)", fontSize: 10,
@@ -392,7 +398,7 @@ export default function Projects() {
           </div>
           <h2 style={{
             fontFamily: "var(--font-syne)", fontWeight: 700,
-            fontSize: "clamp(32px, 5vw, 60px)", color: "var(--text-primary)",
+            fontSize: "clamp(28px, 5vw, 60px)", color: "var(--text-primary)",
             lineHeight: 1.05, letterSpacing: "-0.02em",
           }}>
             Shipped in <span style={{ color: "var(--accent)" }}>Production</span>
@@ -406,11 +412,10 @@ export default function Projects() {
           </p>
         </motion.div>
 
-        {/* Grid */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 440px), 1fr))",
-          gap: 20,
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 400px), 1fr))",
+          gap: "clamp(14px, 2vw, 20px)",
         }}>
           {projects.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
         </div>
