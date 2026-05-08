@@ -14,7 +14,7 @@ const projects = [
     outcome: "Live in production · MK Properties Ajman",
     visual: "db",
     accent: "#00C2A8",
-    link: "https://mkpropertiesinventory.com/guest",
+    link: "https://www.mkpropertiesinventory.com",
   },
   {
     id: "02",
