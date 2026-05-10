@@ -32,8 +32,8 @@ export default function CustomCursor() {
       if (dotRef.current) {
         dotRef.current.style.transform = `translate(${pos.current.x - 4}px, ${pos.current.y - 4}px)`;
       }
-      ring.current.x += (pos.current.x - ring.current.x) * 0.1;
-      ring.current.y += (pos.current.y - ring.current.y) * 0.1;
+      ring.current.x += (pos.current.x - ring.current.x) * 0.18;
+      ring.current.y += (pos.current.y - ring.current.y) * 0.18;
       if (ringRef.current) {
         const s = hovering ? 2.0 : 1;
         ringRef.current.style.transform = `translate(${ring.current.x - 16}px, ${ring.current.y - 16}px) scale(${s})`;
@@ -81,7 +81,7 @@ export default function CustomCursor() {
           border: "1.5px solid var(--accent)",
           pointerEvents: "none",
           zIndex: 9998,
-          transition: "opacity 0.2s ease, transform 0.15s ease",
+          transition: "opacity 0.15s ease",
           willChange: "transform",
         }}
       />
