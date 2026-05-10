@@ -100,7 +100,7 @@ export default function Contact() {
           <div style={{ display: "flex", justifyContent: "center", gap: 32 }}>
             {[
               { label: "LinkedIn", href: "https://www.linkedin.com/in/muneeb-kashif-443050331/" },
-              { label: "GitHub", href: "https://github.com/muneebkashif" },
+              { label: "GitHub", href: "https://github.com/muneebfr-fr" },
             ].map((link) => (
               <a
                 key={link.label}
