@@ -355,7 +355,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         <p style={{
           fontFamily: "var(--font-dm-sans)", fontWeight: 400,
           fontSize: 13, color: "var(--text-primary)",
-          lineHeight: 1.75, marginBottom: 18, opacity: 0.75,
+          lineHeight: 1.75, marginBottom: 18, opacity: 0.9,
         }}>
           {project.description}
         </p>
