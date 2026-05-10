@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import LoadingScreen from "./LoadingScreen";
 import SmoothScrollProvider from "./SmoothScrollProvider";
 import CustomCursor from "./CustomCursor";
@@ -22,19 +22,30 @@ export default function ClientRoot() {
         {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
       </AnimatePresence>
 
-      <SmoothScrollProvider>
-        <CustomCursor />
-        <ScrollProgress />
-        <Navbar />
-        <main>
-          <Hero />
-          <Projects />
-          <Security />
-          <Experience />
-          <Stack />
-          <Contact />
-        </main>
-      </SmoothScrollProvider>
+      <AnimatePresence>
+        {loaded && (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <SmoothScrollProvider>
+              <CustomCursor />
+              <ScrollProgress />
+              <Navbar />
+              <main>
+                <Hero />
+                <Projects />
+                <Security />
+                <Experience />
+                <Stack />
+                <Contact />
+              </main>
+            </SmoothScrollProvider>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
