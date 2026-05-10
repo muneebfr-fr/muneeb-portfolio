@@ -1,6 +1,6 @@
 "use client";
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 
 const capabilities = [
   {
@@ -50,7 +50,7 @@ const frameworks = [
   "Google Cybersecurity Certificate",
 ];
 
-function AttackGraph() {
+function AttackGraph({ inView }: { inView: boolean }) {
   const nodes = [
     { id: "actor", x: 50,  y: 90,  label: "IRGC",       color: "#ef4444" },
     { id: "recon", x: 170, y: 50,  label: "Shodan\nRecon", color: "#f97316" },
@@ -73,17 +73,15 @@ function AttackGraph() {
           stroke="rgba(239,68,68,0.25)" strokeWidth={1} fill="none"
           markerEnd="url(#arr)"
           initial={{ pathLength: 0, opacity: 0 }}
-          whileInView={{ pathLength: 1, opacity: 1 }}
+          animate={inView ? { pathLength: 1, opacity: 1 } : {}}
           transition={{ delay: 0.2 + i * 0.12, duration: 0.5 }}
-          viewport={{ once: true }}
         />
       ))}
       {nodes.map((n,i) => (
         <motion.g key={n.id}
           initial={{ opacity: 0, scale: 0 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ delay: 0.05 + i * 0.1, type: "spring", stiffness: 220 }}
-          viewport={{ once: true }}
           style={{ transformOrigin: `${n.x}px ${n.y}px` }}
         >
           <rect x={n.x-30} y={n.y-20} width={60} height={40} rx={3}
@@ -100,8 +98,10 @@ function AttackGraph() {
 
 export default function Security() {
   const ref = useRef<HTMLElement>(null);
+  const graphRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const headerY = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const graphInView = useInView(graphRef, { once: true, margin: "0px" });
 
   return (
     <section
@@ -311,14 +311,17 @@ export default function Security() {
               </div>
             </div>
 
-            <div style={{
-              background: "rgba(9,9,12,0.6)",
-              border: "1px solid rgba(239,68,68,0.1)",
-              borderRadius: 6, padding: 20,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              minHeight: 160,
-            }}>
-              <AttackGraph />
+            <div
+              ref={graphRef}
+              style={{
+                background: "rgba(9,9,12,0.6)",
+                border: "1px solid rgba(239,68,68,0.1)",
+                borderRadius: 6, padding: 20,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                minHeight: 160,
+              }}
+            >
+              <AttackGraph inView={graphInView} />
             </div>
           </div>
         </motion.div>

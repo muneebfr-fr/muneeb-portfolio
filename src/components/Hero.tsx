@@ -145,7 +145,8 @@ export default function Hero() {
                 letterSpacing: "-0.03em",
                 lineHeight: 0.92,
                 color: accent ? "var(--accent)" : "var(--text-primary)",
-                whiteSpace: "nowrap",
+                wordBreak: "break-word",
+                overflowWrap: "anywhere",
               }}>
                 {word}
               </span>
