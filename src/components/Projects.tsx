@@ -393,7 +393,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                 fontFamily: "var(--font-dm-mono)", fontSize: 9,
                 letterSpacing: "0.18em", textTransform: "uppercase",
                 color: "var(--accent)", border: "1px solid rgba(0,194,168,0.3)",
-                padding: "4px 12px", borderRadius: 2, textDecoration: "none",
+                padding: "10px 20px", borderRadius: 2, textDecoration: "none",
                 whiteSpace: "nowrap", transition: "background 0.2s",
                 flexShrink: 0,
               }}

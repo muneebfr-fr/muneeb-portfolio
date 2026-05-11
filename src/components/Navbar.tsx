@@ -70,6 +70,18 @@ export default function Navbar() {
               textTransform: "uppercase",
               color: "var(--accent)",
               textDecoration: "none",
+              padding: "6px 10px",
+              border: "1px solid transparent",
+              borderRadius: 2,
+              transition: "border-color 0.2s, background 0.2s",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,194,168,0.3)";
+              (e.currentTarget as HTMLElement).style.background = "rgba(0,194,168,0.06)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.borderColor = "transparent";
+              (e.currentTarget as HTMLElement).style.background = "transparent";
             }}
           >
             MMK

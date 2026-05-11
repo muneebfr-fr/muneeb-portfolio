@@ -3,12 +3,12 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring, type Variants } from "framer-motion";
 
 const credentials = [
-  "Full-Stack Developer",
-  "UI/UX Designer",
-  "Cybersecurity Major",
-  "CS · UOWD Dubai",
-  "Google Certified",
-  "AED 13M+ Deployed",
+  { label: "Full-Stack Developer", href: "#work" },
+  { label: "UI/UX Designer",       href: "#work" },
+  { label: "Cybersecurity Major",  href: "#security" },
+  { label: "CS · UOWD Dubai",      href: "#experience" },
+  { label: "Google Certified",     href: "#security" },
+  { label: "AED 13M+ Deployed",    href: "#experience" },
 ];
 
 export default function Hero() {
@@ -206,11 +206,12 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Right — credential tags */}
+            {/* Right — credential tags (linked) */}
             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 7, flex: "0 1 auto" }}>
               {credentials.map((c, i) => (
-                <motion.span
-                  key={c}
+                <motion.a
+                  key={c.label}
+                  href={c.href}
                   initial={{ opacity: 0, x: 14 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{
@@ -222,11 +223,23 @@ export default function Hero() {
                     letterSpacing: "0.16em", textTransform: "uppercase",
                     color: i < 2 ? "var(--accent)" : "var(--text-muted)",
                     border: `1px solid ${i < 2 ? "rgba(0,194,168,0.3)" : "var(--border)"}`,
-                    padding: "4px 12px", borderRadius: 2, whiteSpace: "nowrap",
+                    padding: "6px 14px", borderRadius: 2, whiteSpace: "nowrap",
+                    textDecoration: "none", transition: "border-color 0.2s, color 0.2s",
+                    cursor: "pointer",
+                  }}
+                  onMouseEnter={e => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.borderColor = "rgba(0,194,168,0.55)";
+                    el.style.color = "var(--accent)";
+                  }}
+                  onMouseLeave={e => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.borderColor = i < 2 ? "rgba(0,194,168,0.3)" : "var(--border)";
+                    el.style.color = i < 2 ? "var(--accent)" : "var(--text-muted)";
                   }}
                 >
-                  {c}
-                </motion.span>
+                  {c.label}
+                </motion.a>
               ))}
             </div>
           </div>

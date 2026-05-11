@@ -159,6 +159,27 @@ export default function Contact() {
         >
           Ajman, UAE · Built with Next.js
         </span>
+        <a
+          href="#hero"
+          style={{
+            fontFamily: "var(--font-dm-mono)", fontSize: 9,
+            letterSpacing: "0.22em", textTransform: "uppercase",
+            color: "var(--text-muted)", textDecoration: "none",
+            border: "1px solid var(--border)", padding: "8px 16px", borderRadius: 2,
+            transition: "color 0.2s, border-color 0.2s",
+            display: "flex", alignItems: "center", gap: 8,
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLElement).style.color = "var(--accent)";
+            (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,194,168,0.35)";
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLElement).style.color = "var(--text-muted)";
+            (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+          }}
+        >
+          ↑ Back to top
+        </a>
       </div>
     </section>
   );
