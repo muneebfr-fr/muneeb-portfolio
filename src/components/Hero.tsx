@@ -260,15 +260,15 @@ export default function Hero() {
         }}
       >
         <span style={{
-          fontFamily: "var(--font-dm-mono)", fontSize: 9,
-          letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--text-muted)",
+          fontFamily: "var(--font-dm-mono)", fontSize: 11,
+          letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--text-secondary)",
         }}>
           Scroll
         </span>
         <motion.div
-          animate={{ x: [0, 8, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-          style={{ width: 24, height: 1, background: "var(--accent)", opacity: 0.5 }}
+          animate={{ x: [0, 10, 0] }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+          style={{ width: 32, height: 1, background: "var(--accent)", opacity: 0.9 }}
         />
       </motion.div>
 
