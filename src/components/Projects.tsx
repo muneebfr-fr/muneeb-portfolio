@@ -443,7 +443,7 @@ export default function Projects() {
             fontSize: "clamp(14px, 1.8vw, 16px)", color: "var(--text-secondary)",
             lineHeight: 1.8, maxWidth: 520, marginTop: 14,
           }}>
-            Full-stack platforms, UI/UX design systems, data pipelines. Not tutorials. Real deployments, real users, real stakes.
+            Full-stack platforms, UI/UX design systems, data pipelines. Full deployments. Real users.
           </p>
         </motion.div>
 
