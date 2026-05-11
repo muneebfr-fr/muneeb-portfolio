@@ -162,23 +162,22 @@ export default function Contact() {
         <a
           href="#hero"
           style={{
-            fontFamily: "var(--font-dm-mono)", fontSize: 9,
-            letterSpacing: "0.22em", textTransform: "uppercase",
-            color: "var(--text-muted)", textDecoration: "none",
-            border: "1px solid var(--border)", padding: "8px 16px", borderRadius: 2,
-            transition: "color 0.2s, border-color 0.2s",
+            fontFamily: "var(--font-dm-mono)", fontSize: 11,
+            letterSpacing: "0.2em", textTransform: "uppercase",
+            color: "var(--bg-base)", background: "var(--accent)",
+            textDecoration: "none",
+            padding: "12px 24px", borderRadius: 2,
+            transition: "opacity 0.2s",
             display: "flex", alignItems: "center", gap: 8,
           }}
           onMouseEnter={e => {
-            (e.currentTarget as HTMLElement).style.color = "var(--accent)";
-            (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,194,168,0.35)";
+            (e.currentTarget as HTMLElement).style.opacity = "0.85";
           }}
           onMouseLeave={e => {
-            (e.currentTarget as HTMLElement).style.color = "var(--text-muted)";
-            (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+            (e.currentTarget as HTMLElement).style.opacity = "1";
           }}
         >
-          ↑ Back to top
+          ↑ Back to Top
         </a>
       </div>
     </section>
