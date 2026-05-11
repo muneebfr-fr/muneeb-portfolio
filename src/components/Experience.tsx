@@ -275,29 +275,100 @@ export default function Experience() {
 
         {/* Education */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          id="education"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.6 }}
+          transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
           style={{
-            marginTop: 32, padding: "clamp(16px, 3vw, 20px) clamp(20px, 3vw, 28px)",
-            border: "1px solid var(--border)", borderRadius: 8,
-            background: "rgba(9,9,12,0.5)",
-            display: "flex", alignItems: "flex-start", gap: 20, flexWrap: "wrap",
+            marginTop: "clamp(40px, 6vw, 64px)",
+            border: "1px solid var(--border)", borderRadius: 10,
+            background: "var(--bg-surface)",
+            overflow: "hidden", position: "relative",
           }}
         >
+          {/* Shimmer top */}
           <div style={{
-            fontFamily: "var(--font-dm-mono)", fontSize: 9, letterSpacing: "0.22em",
-            textTransform: "uppercase", color: "var(--text-muted)", flexShrink: 0, paddingTop: 2,
-          }}>
-            Academic
-          </div>
-          <div style={{
-            fontFamily: "var(--font-dm-sans)", fontSize: "clamp(12px, 1.6vw, 14px)",
-            fontWeight: 300, color: "var(--text-secondary)", lineHeight: 1.75,
-          }}>
-            BSc Computer Science, Cybersecurity · University of Wollongong Dubai · 2nd Year ·{" "}
-            <span style={{ color: "var(--accent)" }}>Distinction standing</span> under Australian curriculum
+            position: "absolute", top: 0, left: 0, right: 0, height: 1,
+            background: "linear-gradient(to right, transparent, rgba(0,194,168,0.3), transparent)",
+          }} />
+
+          <div style={{ padding: "clamp(24px, 4vw, 40px)" }}>
+            {/* Header row */}
+            <div style={{
+              display: "flex", justifyContent: "space-between", alignItems: "flex-start",
+              flexWrap: "wrap", gap: 12, marginBottom: 24, paddingBottom: 20,
+              borderBottom: "1px solid var(--border)",
+            }}>
+              <div>
+                <div style={{
+                  fontFamily: "var(--font-dm-mono)", fontSize: 9, letterSpacing: "0.28em",
+                  textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 10,
+                }}>
+                  Academic
+                </div>
+                <h3 style={{
+                  fontFamily: "var(--font-syne)", fontWeight: 700,
+                  fontSize: "clamp(17px, 2.5vw, 24px)", color: "var(--text-primary)", margin: 0,
+                }}>
+                  University of Wollongong Dubai
+                </h3>
+              </div>
+              <span style={{
+                fontFamily: "var(--font-dm-mono)", fontSize: 10,
+                letterSpacing: "0.14em", color: "var(--text-muted)", whiteSpace: "nowrap",
+              }}>
+                2024 to Present
+              </span>
+            </div>
+
+            {/* Degree + details */}
+            <div style={{ display: "flex", gap: "clamp(12px, 2vw, 20px)" }}>
+              <div style={{ flexShrink: 0, paddingTop: 5 }}>
+                <div style={{
+                  width: 7, height: 7, borderRadius: "50%",
+                  background: "var(--accent)", boxShadow: "0 0 8px rgba(0,194,168,0.4)",
+                }} />
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{
+                  display: "flex", alignItems: "center", gap: 10, marginBottom: 14, flexWrap: "wrap",
+                }}>
+                  <span style={{
+                    fontFamily: "var(--font-dm-sans)", fontWeight: 500,
+                    fontSize: "clamp(13px, 1.8vw, 15px)", color: "var(--text-primary)",
+                  }}>
+                    BSc Computer Science, Cybersecurity
+                  </span>
+                  <span style={{
+                    fontFamily: "var(--font-dm-mono)", fontSize: 9, letterSpacing: "0.14em",
+                    color: "var(--accent)", border: "1px solid rgba(0,194,168,0.25)",
+                    padding: "2px 8px", borderRadius: 3,
+                  }}>
+                    2nd Year
+                  </span>
+                </div>
+                <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
+                  {[
+                    "Australian curriculum — one of the top cybersecurity programs in the region",
+                    "Distinction standing across all completed units",
+                    "Focus areas: network security, ethical hacking, secure software development",
+                  ].map((point, i) => (
+                    <li key={i} style={{
+                      fontFamily: "var(--font-dm-sans)", fontSize: "clamp(12px, 1.6vw, 14px)",
+                      fontWeight: 300, color: "var(--text-secondary)", lineHeight: 1.75,
+                      paddingLeft: 16, position: "relative",
+                    }}>
+                      <span style={{
+                        position: "absolute", left: 0, top: "0.65em",
+                        width: 4, height: 1, background: "var(--accent)", opacity: 0.5,
+                      }} />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>

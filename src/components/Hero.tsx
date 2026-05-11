@@ -6,7 +6,7 @@ const credentials = [
   { label: "Full-Stack Developer", href: "#work" },
   { label: "UI/UX Designer",       href: "#work" },
   { label: "Cybersecurity Major",  href: "#security" },
-  { label: "CS · UOWD Dubai",      href: "#experience" },
+  { label: "CS · UOWD Dubai",      href: "#education" },
   { label: "Google Certified",     href: "#security" },
   { label: "AED 13M+ Deployed",    href: "#experience" },
 ];
