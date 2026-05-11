@@ -282,15 +282,15 @@ export default function Experience() {
           transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
           style={{
             marginTop: "clamp(40px, 6vw, 64px)",
-            border: "1px solid var(--border)", borderRadius: 10,
-            background: "var(--bg-surface)",
+            border: "1px solid rgba(0,194,168,0.22)", borderRadius: 10,
+            background: "rgba(0,194,168,0.03)",
             overflow: "hidden", position: "relative",
           }}
         >
-          {/* Shimmer top */}
+          {/* Teal shimmer top — stronger than work cards */}
           <div style={{
-            position: "absolute", top: 0, left: 0, right: 0, height: 1,
-            background: "linear-gradient(to right, transparent, rgba(0,194,168,0.3), transparent)",
+            position: "absolute", top: 0, left: 0, right: 0, height: 2,
+            background: "linear-gradient(to right, transparent, rgba(0,194,168,0.7), transparent)",
           }} />
 
           <div style={{ padding: "clamp(24px, 4vw, 40px)" }}>
@@ -350,9 +350,9 @@ export default function Experience() {
                 </div>
                 <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
                   {[
-                    "Australian curriculum — one of the top cybersecurity programs in the region",
-                    "Distinction standing across all completed units",
-                    "Focus areas: network security, ethical hacking, secure software development",
+                    "Australian curriculum; one of the top cybersecurity programs in the region",
+                    "Distinction standing across multiple components",
+                    "Focus areas: network security, ethical hacking, secure software development, Project Management, software development methodology, UI/UX design, Data structures and algorithms",
                   ].map((point, i) => (
                     <li key={i} style={{
                       fontFamily: "var(--font-dm-sans)", fontSize: "clamp(12px, 1.6vw, 14px)",
