@@ -4,6 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const links = ["Work", "Security", "Experience", "Stack", "Contact"];
 
+function smoothScrollTo(href: string) {
+  const id = href.replace("#", "");
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -63,6 +69,7 @@ export default function Navbar() {
           {/* Logo */}
           <a
             href="#hero"
+            onClick={e => { e.preventDefault(); smoothScrollTo("#hero"); }}
             style={{
               fontFamily: "var(--font-dm-mono)",
               fontSize: 12,
@@ -96,6 +103,7 @@ export default function Navbar() {
               <a
                 key={link}
                 href={`#${link.toLowerCase()}`}
+                onClick={e => { e.preventDefault(); smoothScrollTo(`#${link.toLowerCase()}`); }}
                 style={{
                   fontFamily: "var(--font-dm-mono)",
                   fontSize: 11,
@@ -185,7 +193,7 @@ export default function Navbar() {
                 <motion.a
                   key={link}
                   href={`#${link.toLowerCase()}`}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={e => { e.preventDefault(); smoothScrollTo(`#${link.toLowerCase()}`); setMenuOpen(false); }}
                   initial={{ opacity: 0, y: 32 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.08 + i * 0.06, ease: [0.22, 1, 0.36, 1], duration: 0.5 }}

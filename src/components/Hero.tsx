@@ -2,6 +2,12 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring, type Variants } from "framer-motion";
 
+function smoothScrollTo(href: string) {
+  const id = href.replace("#", "");
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
 const credentials = [
   { label: "Full-Stack Developer", href: "#work" },
   { label: "UI/UX Designer",       href: "#work" },
@@ -187,7 +193,7 @@ export default function Hero() {
                 on the line. 20 years old.
               </p>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <a href="#work" style={{
+                <a href="#work" onClick={e => { e.preventDefault(); smoothScrollTo("#work"); }} style={{
                   fontFamily: "var(--font-dm-mono)", fontSize: 11,
                   letterSpacing: "0.2em", textTransform: "uppercase",
                   color: "var(--bg-base)", background: "var(--accent)",
@@ -195,7 +201,7 @@ export default function Hero() {
                 }}>
                   View Work
                 </a>
-                <a href="#contact" style={{
+                <a href="#contact" onClick={e => { e.preventDefault(); smoothScrollTo("#contact"); }} style={{
                   fontFamily: "var(--font-dm-mono)", fontSize: 11,
                   letterSpacing: "0.2em", textTransform: "uppercase",
                   color: "var(--text-secondary)", border: "1px solid var(--border)",
@@ -212,6 +218,7 @@ export default function Hero() {
                 <motion.a
                   key={c.label}
                   href={c.href}
+                  onClick={e => { e.preventDefault(); smoothScrollTo(c.href); }}
                   initial={{ opacity: 0, x: 14 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{

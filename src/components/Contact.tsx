@@ -2,6 +2,12 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
+function smoothScrollTo(href: string) {
+  const id = href.replace("#", "");
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
 export default function Contact() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -161,6 +167,7 @@ export default function Contact() {
         </span>
         <a
           href="#hero"
+          onClick={e => { e.preventDefault(); smoothScrollTo("#hero"); }}
           style={{
             fontFamily: "var(--font-dm-mono)", fontSize: 11,
             letterSpacing: "0.2em", textTransform: "uppercase",
