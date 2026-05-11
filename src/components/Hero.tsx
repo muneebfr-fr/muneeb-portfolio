@@ -120,7 +120,7 @@ export default function Hero() {
             fontFamily: "var(--font-dm-mono)", fontSize: "clamp(9px, 1.5vw, 11px)",
             letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--text-muted)",
           }}>
-            Developer · Designer · Security Researcher
+            Developer · Designer · Security Researcher · Sales · Entrepreneur
           </span>
         </motion.div>
 
