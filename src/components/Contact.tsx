@@ -8,111 +8,269 @@ function smoothScrollTo(href: string) {
   if (el) el.scrollIntoView({ behavior: "smooth" });
 }
 
-const TERMINAL_LINES = [
-  { prompt: "$", text: " connect --target muneeb", color: "var(--accent)" },
-  { prompt: ">", text: " checking availability...", color: "rgba(240,238,232,0.45)" },
-  { prompt: ">", text: " status: open to work ✓", color: "#00C2A8" },
-  { prompt: ">", text: " roles: dev · design · freelance", color: "rgba(240,238,232,0.65)" },
-  { prompt: ">", text: " response time: < 24 hours", color: "rgba(240,238,232,0.65)" },
-  { prompt: ">", text: " location: Ajman, UAE · remote OK", color: "rgba(240,238,232,0.65)" },
-  { prompt: ">", text: " ready. drop a message ↓", color: "#00C2A8" },
+type HistoryEntry = { input: string; output: string[] };
+
+const COMMANDS: Record<string, string[]> = {
+  help: [
+    "available commands:",
+    "  whoami      → who is this guy",
+    "  skills      → full tech stack",
+    "  projects    → shipped work",
+    "  experience  → career timeline",
+    "  status      → availability",
+    "  contact     → get in touch",
+    "  clear       → clear terminal",
+  ],
+  whoami: [
+    "Muhammad Muneeb Kashif, 20.",
+    "Full-stack dev · UI/UX designer · security major.",
+    "Built production software, managed AED 13M+,",
+    "closed AED 9M in real estate. All before 21.",
+    "Currently: UOWD Dubai, BSc CS · Cybersecurity.",
+  ],
+  skills: [
+    "frontend:  next.js · react · typescript · tailwind",
+    "backend:   python · supabase · laravel · postgresql",
+    "design:    figma · ui/ux · design systems",
+    "security:  network security · ethical hacking",
+    "tools:     git · vercel · rest apis · crm systems",
+  ],
+  projects: [
+    "01 · MK Properties Inventory System",
+    "     next.js · supabase · postgresql · python",
+    "02 · Where Art Meets Glow (e-commerce)",
+    "     next.js · tailwind · framer motion",
+    "03 · Luxus Glass USA (e-commerce)",
+    "     next.js · design system · us market",
+    "04 · Lead Farming Pipeline",
+    "     python · web scraping · crm integration",
+    "05 · Transport Management System",
+    "     react · node.js · real-time · maps api",
+  ],
+  experience: [
+    "MK Properties Ajman  [Aug 2024 – Mar 2026]",
+    "  · Software Developer (full-stack, solo)",
+    "  · Accounts & Fund Manager (AED 4M+)",
+    "  · Sales Executive (AED 9M+ closed)",
+    "",
+    "MK Motors            [May 2024 – Aug 2024]",
+    "  · Sales Executive, B2C vehicle sales",
+    "",
+    "Freelance            [Jan 2026 – Mar 2026]",
+    "  · UI/UX Designer & Developer, 3 clients",
+  ],
+  status: [
+    "availability:   open to work ✓",
+    "roles:          developer · designer · freelance",
+    "location:       Ajman, UAE · remote OK",
+    "response time:  < 24 hours",
+    "email:          muneebkashif267@gmail.com",
+  ],
+  contact: [
+    "email:    muneebkashif267@gmail.com",
+    "linkedin: linkedin.com/in/muneeb-kashif-443050331",
+    "github:   github.com/muneebfr-fr",
+    "",
+    "or just scroll up and click the email ↑",
+  ],
+};
+
+const COMMAND_CHIPS = ["help", "whoami", "skills", "projects", "experience", "status", "contact"];
+
+const WELCOME = [
+  "muneeb.sh — interactive terminal",
+  "type a command or click one below ↓",
 ];
 
 function TerminalBlock() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(wrapperRef, { once: true, margin: "-60px" });
-  const [visibleLines, setVisibleLines] = useState<number>(0);
-  const [currentText, setCurrentText] = useState<string>("");
-  const [done, setDone] = useState(false);
-  const started = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [input, setInput] = useState("");
+  const [cmdHistory, setCmdHistory] = useState<string[]>([]);
+  const [cmdIndex, setCmdIndex] = useState(-1);
 
+  // Scroll to bottom on new output
   useEffect(() => {
-    if (!isInView || started.current) return;
-    started.current = true;
-    let cancelled = false;
-    let lineIndex = 0;
-    let charIndex = 0;
+    if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+  }, [history]);
 
-    const typeNext = () => {
-      if (cancelled) return;
-      if (lineIndex >= TERMINAL_LINES.length) { setDone(true); return; }
-      const line = TERMINAL_LINES[lineIndex];
-      if (charIndex <= line.text.length) {
-        setCurrentText(line.text.slice(0, charIndex));
-        charIndex++;
-        setTimeout(typeNext, charIndex === 1 ? 200 : 28);
-      } else {
-        setVisibleLines(prev => prev + 1);
-        setCurrentText("");
-        lineIndex++;
-        charIndex = 0;
-        setTimeout(typeNext, 160);
-      }
-    };
+  function runCommand(raw: string) {
+    const cmd = raw.trim().toLowerCase();
+    if (!cmd) return;
 
-    typeNext();
-    return () => { cancelled = true; };
-  }, [isInView]);
+    setCmdHistory(prev => [cmd, ...prev]);
+    setCmdIndex(-1);
+
+    if (cmd === "clear") {
+      setHistory([]);
+      return;
+    }
+
+    const output = COMMANDS[cmd] ?? [
+      `command not found: ${cmd}`,
+      "type 'help' to see available commands.",
+    ];
+
+    setHistory(prev => [...prev, { input: cmd, output }]);
+  }
+
+  function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      runCommand(input);
+      setInput("");
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const next = Math.min(cmdIndex + 1, cmdHistory.length - 1);
+      setCmdIndex(next);
+      setInput(cmdHistory[next] ?? "");
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const next = Math.max(cmdIndex - 1, -1);
+      setCmdIndex(next);
+      setInput(next === -1 ? "" : cmdHistory[next]);
+    }
+  }
+
+  function handleChip(cmd: string) {
+    runCommand(cmd);
+    inputRef.current?.focus();
+  }
 
   return (
-    <div ref={wrapperRef} style={{ width: "100%", maxWidth: 380, minWidth: 280, flexShrink: 0 }}>
+    <div ref={wrapperRef} style={{ width: "100%", maxWidth: 440, minWidth: 280, flexShrink: 0 }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
-        style={{
-          background: "rgba(9,9,12,0.75)",
-          border: "1px solid rgba(0,194,168,0.18)",
-          borderRadius: 6,
-          overflow: "hidden",
-          backdropFilter: "blur(12px)",
-        }}
+        style={{ display: "flex", flexDirection: "column", gap: 10 }}
       >
-        <div style={{
-          display: "flex", alignItems: "center", gap: 6,
-          padding: "8px 12px",
-          borderBottom: "1px solid rgba(240,238,232,0.06)",
-          background: "rgba(240,238,232,0.03)",
-        }}>
-          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FF5F57" }} />
-          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FEBC2E" }} />
-          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#28C840" }} />
-          <span style={{
-            fontFamily: "var(--font-dm-mono)", fontSize: 10,
-            color: "rgba(240,238,232,0.3)", letterSpacing: "0.12em",
-            marginLeft: "auto",
-          }}>contact.sh</span>
+        {/* Terminal window */}
+        <div
+          onClick={() => inputRef.current?.focus()}
+          style={{
+            background: "rgba(9,9,12,0.85)",
+            border: "1px solid rgba(0,194,168,0.2)",
+            borderRadius: 6,
+            overflow: "hidden",
+            backdropFilter: "blur(12px)",
+            cursor: "text",
+          }}
+        >
+          {/* Title bar */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: 6,
+            padding: "8px 12px",
+            borderBottom: "1px solid rgba(240,238,232,0.06)",
+            background: "rgba(240,238,232,0.03)",
+          }}>
+            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FF5F57" }} />
+            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FEBC2E" }} />
+            <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#28C840" }} />
+            <span style={{
+              fontFamily: "var(--font-dm-mono)", fontSize: 10,
+              color: "rgba(240,238,232,0.3)", letterSpacing: "0.12em",
+              marginLeft: "auto",
+            }}>muneeb.sh</span>
+          </div>
+
+          {/* Output body */}
+          <div
+            ref={bodyRef}
+            style={{
+              padding: "14px 16px",
+              height: 240,
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: 4,
+              scrollbarWidth: "none",
+            }}
+          >
+            {/* Welcome */}
+            {WELCOME.map((line, i) => (
+              <div key={i} style={{
+                fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6,
+                color: i === 0 ? "var(--accent)" : "rgba(240,238,232,0.35)",
+              }}>{line}</div>
+            ))}
+
+            {/* History */}
+            {history.map((entry, i) => (
+              <div key={i} style={{ marginTop: 6 }}>
+                <div style={{ display: "flex", fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6 }}>
+                  <span style={{ color: "rgba(0,194,168,0.6)", marginRight: 6, flexShrink: 0 }}>$</span>
+                  <span style={{ color: "var(--text-primary)" }}>{entry.input}</span>
+                </div>
+                {entry.output.map((line, j) => (
+                  <div key={j} style={{
+                    fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.7,
+                    color: line === "" ? undefined : line.includes("✓") ? "#00C2A8" : "rgba(240,238,232,0.65)",
+                    paddingLeft: 14,
+                  }}>{line}</div>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          {/* Input row */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: 6,
+            padding: "8px 16px",
+            borderTop: "1px solid rgba(240,238,232,0.06)",
+          }}>
+            <span style={{ color: "rgba(0,194,168,0.7)", fontFamily: "var(--font-dm-mono)", fontSize: 11, flexShrink: 0 }}>$</span>
+            <input
+              ref={inputRef}
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKey}
+              spellCheck={false}
+              autoComplete="off"
+              style={{
+                flex: 1,
+                background: "transparent",
+                border: "none",
+                outline: "none",
+                fontFamily: "var(--font-dm-mono)",
+                fontSize: 11,
+                color: "var(--text-primary)",
+                caretColor: "var(--accent)",
+              }}
+            />
+          </div>
         </div>
-        <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6 }}>
-          {TERMINAL_LINES.slice(0, visibleLines).map((line, i) => (
-            <div key={i} style={{ display: "flex", fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6 }}>
-              <span style={{ color: "rgba(0,194,168,0.6)", marginRight: 6, flexShrink: 0 }}>{line.prompt}</span>
-              <span style={{ color: line.color }}>{line.text}</span>
-            </div>
+
+        {/* Command chips legend */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {COMMAND_CHIPS.map(cmd => (
+            <button
+              key={cmd}
+              onClick={() => handleChip(cmd)}
+              style={{
+                fontFamily: "var(--font-dm-mono)", fontSize: 10,
+                letterSpacing: "0.14em", textTransform: "lowercase",
+                color: "var(--text-muted)",
+                background: "transparent",
+                border: "1px solid var(--border)",
+                padding: "4px 12px", borderRadius: 3,
+                cursor: "pointer",
+                transition: "color 0.15s, border-color 0.15s",
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.color = "var(--accent)";
+                (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,194,168,0.4)";
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.color = "var(--text-muted)";
+                (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+              }}
+            >
+              {cmd}
+            </button>
           ))}
-          {!done && visibleLines < TERMINAL_LINES.length && (
-            <div style={{ display: "flex", fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6 }}>
-              <span style={{ color: "rgba(0,194,168,0.6)", marginRight: 6, flexShrink: 0 }}>
-                {TERMINAL_LINES[visibleLines].prompt}
-              </span>
-              <span style={{ color: TERMINAL_LINES[visibleLines].color }}>{currentText}</span>
-              <motion.span
-                animate={{ opacity: [1, 0, 1] }}
-                transition={{ duration: 0.8, repeat: Infinity }}
-                style={{ display: "inline-block", width: 7, height: 13, background: "var(--accent)", marginLeft: 1, verticalAlign: "middle" }}
-              />
-            </div>
-          )}
-          {done && (
-            <div style={{ display: "flex", fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6 }}>
-              <span style={{ color: "rgba(0,194,168,0.6)", marginRight: 6 }}>$</span>
-              <motion.span
-                animate={{ opacity: [1, 0, 1] }}
-                transition={{ duration: 0.8, repeat: Infinity }}
-                style={{ display: "inline-block", width: 7, height: 13, background: "var(--accent)", verticalAlign: "middle" }}
-              />
-            </div>
-          )}
         </div>
       </motion.div>
     </div>
