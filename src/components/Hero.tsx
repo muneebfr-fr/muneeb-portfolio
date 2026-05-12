@@ -372,7 +372,7 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll hint — vertical, pinned to right edge in the vacant gap */}
+      {/* Scroll hint — SCROLL label horizontal, vertical line below */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -382,21 +382,29 @@ export default function Hero() {
           position: "absolute",
           right: "clamp(20px, 5vw, 72px)",
           top: "50%",
-          transform: "translateY(-50%) rotate(90deg)",
-          display: "flex", alignItems: "center", gap: 12,
-          transformOrigin: "center center",
+          transform: "translateY(-50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 12,
         }}
       >
         <span style={{
           fontFamily: "var(--font-dm-mono)", fontSize: 11,
-          letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--text-secondary)",
+          letterSpacing: "0.32em", textTransform: "uppercase",
+          color: "var(--text-primary)",
+          writingMode: "horizontal-tb",
         }}>
           Scroll
         </span>
         <motion.div
-          animate={{ x: [0, 10, 0] }}
-          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-          style={{ width: 32, height: 1, background: "var(--accent)", opacity: 0.9 }}
+          animate={{ scaleY: [0.6, 1, 0.6] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            width: 1, height: 64,
+            background: "linear-gradient(to bottom, var(--accent), transparent)",
+            transformOrigin: "top center",
+          }}
         />
       </motion.div>
 
