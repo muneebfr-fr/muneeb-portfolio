@@ -137,7 +137,7 @@ const credentials = [
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 20 });
+  const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 40 });
 
   const nameY = useTransform(smooth, [0, 1], [0, 80]);
   const credY = useTransform(smooth, [0, 1], [0, 40]);
