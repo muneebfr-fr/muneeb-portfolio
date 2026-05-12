@@ -74,14 +74,14 @@ function AttackGraph({ inView }: { inView: boolean }) {
           markerEnd="url(#arr)"
           initial={{ pathLength: 0, opacity: 0 }}
           animate={inView ? { pathLength: 1, opacity: 1 } : {}}
-          transition={{ delay: 0.2 + i * 0.12, duration: 0.5 }}
+          transition={{ delay: 0.3 + i * 0.2, duration: 1.0 }}
         />
       ))}
       {nodes.map((n,i) => (
         <motion.g key={n.id}
           initial={{ opacity: 0, scale: 0 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ delay: 0.05 + i * 0.1, type: "spring", stiffness: 220 }}
+          transition={{ delay: 0.1 + i * 0.16, type: "spring", stiffness: 120, damping: 14 }}
           style={{ transformOrigin: `${n.x}px ${n.y}px` }}
         >
           <rect x={n.x-30} y={n.y-20} width={60} height={40} rx={3}
@@ -157,7 +157,7 @@ export default function Security() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.06, duration: 0.5 }}
+              transition={{ delay: i * 0.1, duration: 0.9 }}
               style={{
                 padding: "clamp(20px, 3vw, 28px)",
                 background: "var(--bg-surface)",
@@ -172,7 +172,7 @@ export default function Security() {
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.3 + i * 0.06, duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
+                transition={{ delay: 0.5 + i * 0.1, duration: 1.3, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
                 style={{
                   position: "absolute", top: 0, left: 0,
                   height: 2, width: `${cap.level}%`,

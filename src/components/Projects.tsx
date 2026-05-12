@@ -98,13 +98,13 @@ function DBViz({ inView }: { inView: boolean }) {
           stroke="rgba(0,194,168,0.3)" strokeWidth={1} fill="none"
           initial={{ pathLength: 0, opacity: 0 }}
           animate={inView ? { pathLength: 1, opacity: 1 } : {}}
-          transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }} />
+          transition={{ delay: 0.2 + i * 0.18, duration: 1.1 }} />
       ))}
       {nodes.map((n,i) => (
         <motion.g key={i}
           initial={{ opacity: 0, y: 6 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: i * 0.08 }}
+          transition={{ delay: 0.1 + i * 0.14, duration: 0.7 }}
         >
           <rect x={n.x} y={n.y} width={n.w} height={32} rx={3}
             fill="rgba(26,26,32,0.9)" stroke="rgba(0,194,168,0.3)" strokeWidth={1} />
@@ -129,7 +129,7 @@ function EcomViz({ inView }: { inView: boolean }) {
         <motion.g key={i}
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22,1,0.36,1] as [number,number,number,number] }}
+          transition={{ delay: i * 0.18, duration: 0.9, ease: [0.22,1,0.36,1] as [number,number,number,number] }}
         >
           <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={5}
             fill={`${p.color}14`} stroke={`${p.color}45`} strokeWidth={1} />
@@ -143,7 +143,7 @@ function EcomViz({ inView }: { inView: boolean }) {
         fill="rgba(212,99,122,0.15)" stroke="rgba(212,99,122,0.4)" strokeWidth={1}
         initial={{ scaleX: 0 }}
         animate={inView ? { scaleX: 1 } : {}}
-        transition={{ delay: 0.5, duration: 0.6 }}
+        transition={{ delay: 0.8, duration: 1.1 }}
         style={{ transformOrigin: "210px 150px" }}
       />
       <text x={210} y={153} textAnchor="middle"
@@ -171,7 +171,7 @@ function LuxusViz({ inView }: { inView: boolean }) {
         <motion.g key={i}
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22,1,0.36,1] as [number,number,number,number] }}
+          transition={{ delay: i * 0.18, duration: 0.9, ease: [0.22,1,0.36,1] as [number,number,number,number] }}
         >
           <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={4}
             fill="url(#gold-grad)" stroke={`${p.color}40`} strokeWidth={1} />
@@ -182,7 +182,7 @@ function LuxusViz({ inView }: { inView: boolean }) {
       <motion.path d="M20,148 L470,148" stroke="rgba(196,150,90,0.25)" strokeWidth={1} fill="none"
         initial={{ pathLength: 0 }}
         animate={inView ? { pathLength: 1 } : {}}
-        transition={{ delay: 0.5, duration: 0.8 }}
+        transition={{ delay: 0.8, duration: 1.4 }}
       />
       <text x="245" y="143" textAnchor="middle" fill="rgba(196,150,90,0.5)"
         fontSize={8} fontFamily="monospace" letterSpacing="4">LUXUS GLASS USA</text>
@@ -204,7 +204,7 @@ function PipelineViz({ inView }: { inView: boolean }) {
           <motion.g key={s}
             initial={{ opacity: 0, y: -8 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: i * 0.09, duration: 0.4 }}
+            transition={{ delay: i * 0.16, duration: 0.8 }}
           >
             <rect x={x} y={30} width={boxW} height={34} rx={3}
               fill="rgba(26,26,32,0.9)" stroke="rgba(0,194,168,0.28)" strokeWidth={1} />
@@ -216,7 +216,7 @@ function PipelineViz({ inView }: { inView: boolean }) {
                 stroke="rgba(0,194,168,0.45)" strokeWidth={1} fill="none"
                 initial={{ pathLength: 0 }}
                 animate={inView ? { pathLength: 1 } : {}}
-                transition={{ delay: 0.3 + i * 0.09 }}
+                transition={{ delay: 0.5 + i * 0.16, duration: 0.8 }}
               />
             )}
           </motion.g>
@@ -225,7 +225,7 @@ function PipelineViz({ inView }: { inView: boolean }) {
       {inView && [0, 1, 2].map(i => (
         <motion.circle key={i} r={3} fill="var(--accent)"
           animate={{ cx: [startX, startX + total, startX] }}
-          transition={{ duration: 4, delay: i * 1.35, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 6, delay: i * 2.0, repeat: Infinity, ease: "linear" }}
           style={{ cy: 47 }}
         />
       ))}
@@ -249,14 +249,14 @@ function NetworkViz({ inView }: { inView: boolean }) {
           stroke="rgba(0,194,168,0.2)" strokeWidth={1} strokeDasharray="3 3" fill="none"
           initial={{ pathLength: 0 }}
           animate={inView ? { pathLength: 1 } : {}}
-          transition={{ delay: i * 0.07, duration: 0.6 }}
+          transition={{ delay: i * 0.12, duration: 1.1 }}
         />
       ))}
       {hubs.map((h,i) => (
         <motion.g key={i}
           initial={{ opacity: 0, scale: 0 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ delay: i * 0.07, type: "spring", stiffness: 220 }}
+          transition={{ delay: i * 0.12, type: "spring", stiffness: 120, damping: 14 }}
           style={{ transformOrigin: `${h.x}px ${h.y}px` }}
         >
           <circle cx={h.x} cy={h.y} r={h.r}
