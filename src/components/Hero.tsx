@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useSpring, type Variants } from "framer-motion";
+import { motion, useScroll, useTransform, type Variants } from "framer-motion";
 
 function smoothScrollTo(href: string) {
   const id = href.replace("#", "");
@@ -137,11 +137,10 @@ const credentials = [
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 40 });
 
-  const nameY = useTransform(smooth, [0, 1], [0, 80]);
-  const credY = useTransform(smooth, [0, 1], [0, 40]);
-  const gridOpacity = useTransform(smooth, [0, 0.8], [1, 0]);
+  const nameY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const credY = useTransform(scrollYProgress, [0, 1], [0, 40]);
+  const gridOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   const wordVariants: Variants = {
     hidden: {},
