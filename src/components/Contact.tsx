@@ -8,6 +8,121 @@ function smoothScrollTo(href: string) {
   if (el) el.scrollIntoView({ behavior: "smooth" });
 }
 
+const TERMINAL_LINES = [
+  { prompt: "$", text: " muneeb.init()", color: "var(--accent)" },
+  { prompt: ">", text: " loading profile...", color: "rgba(240,238,232,0.45)" },
+  { prompt: ">", text: " frontend: next.js · react · typescript · tailwind", color: "rgba(240,238,232,0.65)" },
+  { prompt: ">", text: " backend:  python · supabase · laravel · postgresql", color: "rgba(240,238,232,0.65)" },
+  { prompt: ">", text: " deployed: 5 projects, 3 clients", color: "rgba(240,238,232,0.65)" },
+  { prompt: ">", text: " managed: AED 13M+", color: "rgba(240,238,232,0.65)" },
+  { prompt: ">", text: " status: open to work ✓", color: "#00C2A8" },
+];
+
+function TerminalBlock() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const [visibleLines, setVisibleLines] = useState<number>(0);
+  const [currentText, setCurrentText] = useState<string>("");
+  const [done, setDone] = useState(false);
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    if (!isInView || started) return;
+    setStarted(true);
+    let cancelled = false;
+    let lineIndex = 0;
+    let charIndex = 0;
+
+    const typeNext = () => {
+      if (cancelled) return;
+      if (lineIndex >= TERMINAL_LINES.length) { setDone(true); return; }
+      const line = TERMINAL_LINES[lineIndex];
+      if (charIndex <= line.text.length) {
+        setCurrentText(line.text.slice(0, charIndex));
+        charIndex++;
+        setTimeout(typeNext, charIndex === 1 ? 200 : 28);
+      } else {
+        setVisibleLines(lineIndex + 1);
+        setCurrentText("");
+        lineIndex++;
+        charIndex = 0;
+        setTimeout(typeNext, 160);
+      }
+    };
+
+    typeNext();
+    return () => { cancelled = true; };
+  }, [isInView, started]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
+      style={{
+        background: "rgba(9,9,12,0.75)",
+        border: "1px solid rgba(0,194,168,0.18)",
+        borderRadius: 6,
+        overflow: "hidden",
+        backdropFilter: "blur(12px)",
+        width: "100%",
+        maxWidth: 380,
+        minWidth: 280,
+        flexShrink: 0,
+      }}
+    >
+      <div style={{
+        display: "flex", alignItems: "center", gap: 6,
+        padding: "8px 12px",
+        borderBottom: "1px solid rgba(240,238,232,0.06)",
+        background: "rgba(240,238,232,0.03)",
+      }}>
+        <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FF5F57" }} />
+        <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FEBC2E" }} />
+        <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#28C840" }} />
+        <span style={{
+          fontFamily: "var(--font-dm-mono)", fontSize: 10,
+          color: "rgba(240,238,232,0.3)", letterSpacing: "0.12em",
+          marginLeft: "auto",
+        }}>muneeb.sh</span>
+      </div>
+      <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6 }}>
+        {TERMINAL_LINES.slice(0, visibleLines).map((line, i) => (
+          <div key={i} style={{ display: "flex", fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6 }}>
+            <span style={{ color: "rgba(0,194,168,0.6)", marginRight: 6, flexShrink: 0 }}>{line.prompt}</span>
+            <span style={{ color: line.color }}>{line.text}</span>
+          </div>
+        ))}
+        {!done && visibleLines < TERMINAL_LINES.length && isInView && (
+          <div style={{ display: "flex", fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6 }}>
+            <span style={{ color: "rgba(0,194,168,0.6)", marginRight: 6, flexShrink: 0 }}>
+              {TERMINAL_LINES[visibleLines].prompt}
+            </span>
+            <span style={{ color: TERMINAL_LINES[visibleLines].color }}>{currentText}</span>
+            <motion.span
+              animate={{ opacity: [1, 0, 1] }}
+              transition={{ duration: 0.8, repeat: Infinity }}
+              style={{ display: "inline-block", width: 7, height: 13, background: "var(--accent)", marginLeft: 1, verticalAlign: "middle" }}
+            />
+          </div>
+        )}
+        {done && (
+          <div style={{ display: "flex", fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6 }}>
+            <span style={{ color: "rgba(0,194,168,0.6)", marginRight: 6 }}>$</span>
+            <motion.span
+              animate={{ opacity: [1, 0, 1] }}
+              transition={{ duration: 0.8, repeat: Infinity }}
+              style={{ display: "inline-block", width: 7, height: 13, background: "var(--accent)", verticalAlign: "middle" }}
+            />
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
 const EMAIL = "muneebkashif267@gmail.com";
 const CHARS = "abcdefghijklmnopqrstuvwxyz0123456789@._";
 
@@ -159,13 +274,20 @@ export default function Contact() {
             interesting freelance projects.
           </p>
 
-          {/* Email CTA */}
-          <div style={{ marginBottom: 48 }}>
-            <ScrambleEmail />
-          </div>
-
-          {/* Social links */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 32 }}>
+          {/* Email + Terminal row */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "clamp(32px, 5vw, 64px)",
+            flexWrap: "wrap",
+            marginBottom: 48,
+            textAlign: "left",
+          }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "flex-start" }}>
+              <ScrambleEmail />
+              {/* Social links */}
+              <div style={{ display: "flex", gap: 32 }}>
             {[
               { label: "LinkedIn", href: "https://www.linkedin.com/in/muneeb-kashif-443050331/" },
               { label: "GitHub", href: "https://github.com/muneebfr-fr" },
@@ -190,7 +312,11 @@ export default function Contact() {
                 {link.label}
               </a>
             ))}
+              </div>
+            </div>
+            <TerminalBlock />
           </div>
+
         </motion.div>
       </motion.div>
 
