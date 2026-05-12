@@ -1,11 +1,127 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useSpring, type Variants } from "framer-motion";
 
 function smoothScrollTo(href: string) {
   const id = href.replace("#", "");
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
+const TERMINAL_LINES = [
+  { prompt: "$", text: " muneeb.init()", color: "var(--accent)" },
+  { prompt: ">", text: " loading profile...", color: "rgba(240,238,232,0.45)" },
+  { prompt: ">", text: " stack: next.js · supabase · python · figma", color: "rgba(240,238,232,0.65)" },
+  { prompt: ">", text: " deployed: 5 projects, 3 clients", color: "rgba(240,238,232,0.65)" },
+  { prompt: ">", text: " managed: AED 13M+", color: "rgba(240,238,232,0.65)" },
+  { prompt: ">", text: " status: open to work ✓", color: "#00C2A8" },
+];
+
+function TerminalBlock() {
+  const [visibleLines, setVisibleLines] = useState<number>(0);
+  const [currentText, setCurrentText] = useState<string>("");
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    let lineIndex = 0;
+    let charIndex = 0;
+
+    const typeNext = () => {
+      if (cancelled) return;
+      if (lineIndex >= TERMINAL_LINES.length) { setDone(true); return; }
+
+      const line = TERMINAL_LINES[lineIndex];
+      if (charIndex <= line.text.length) {
+        setCurrentText(line.text.slice(0, charIndex));
+        charIndex++;
+        setTimeout(typeNext, charIndex === 1 ? 300 : 28);
+      } else {
+        setVisibleLines(lineIndex + 1);
+        setCurrentText("");
+        lineIndex++;
+        charIndex = 0;
+        setTimeout(typeNext, 180);
+      }
+    };
+
+    const start = setTimeout(typeNext, 1400);
+    return () => { cancelled = true; clearTimeout(start); };
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
+      style={{
+        background: "rgba(9,9,12,0.75)",
+        border: "1px solid rgba(0,194,168,0.18)",
+        borderRadius: 6,
+        overflow: "hidden",
+        backdropFilter: "blur(12px)",
+        width: "100%",
+        maxWidth: 340,
+        minWidth: 260,
+      }}
+    >
+      {/* Title bar */}
+      <div style={{
+        display: "flex", alignItems: "center", gap: 6,
+        padding: "8px 12px",
+        borderBottom: "1px solid rgba(240,238,232,0.06)",
+        background: "rgba(240,238,232,0.03)",
+      }}>
+        <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FF5F57" }} />
+        <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FEBC2E" }} />
+        <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#28C840" }} />
+        <span style={{
+          fontFamily: "var(--font-dm-mono)", fontSize: 10,
+          color: "rgba(240,238,232,0.3)", letterSpacing: "0.12em",
+          marginLeft: "auto",
+        }}>
+          muneeb.sh
+        </span>
+      </div>
+
+      {/* Lines */}
+      <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6 }}>
+        {TERMINAL_LINES.slice(0, visibleLines).map((line, i) => (
+          <div key={i} style={{ display: "flex", fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6 }}>
+            <span style={{ color: "rgba(0,194,168,0.6)", marginRight: 6, flexShrink: 0 }}>{line.prompt}</span>
+            <span style={{ color: line.color }}>{line.text}</span>
+          </div>
+        ))}
+
+        {/* Currently typing line */}
+        {visibleLines < TERMINAL_LINES.length && (
+          <div style={{ display: "flex", fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6 }}>
+            <span style={{ color: "rgba(0,194,168,0.6)", marginRight: 6, flexShrink: 0 }}>
+              {TERMINAL_LINES[visibleLines].prompt}
+            </span>
+            <span style={{ color: TERMINAL_LINES[visibleLines].color }}>{currentText}</span>
+            <motion.span
+              animate={{ opacity: [1, 0, 1] }}
+              transition={{ duration: 0.8, repeat: Infinity }}
+              style={{ display: "inline-block", width: 7, height: 13, background: "var(--accent)", marginLeft: 1, verticalAlign: "middle" }}
+            />
+          </div>
+        )}
+
+        {/* Idle cursor after done */}
+        {done && (
+          <div style={{ display: "flex", fontFamily: "var(--font-dm-mono)", fontSize: 11, lineHeight: 1.6 }}>
+            <span style={{ color: "rgba(0,194,168,0.6)", marginRight: 6 }}>$</span>
+            <motion.span
+              animate={{ opacity: [1, 0, 1] }}
+              transition={{ duration: 0.8, repeat: Infinity }}
+              style={{ display: "inline-block", width: 7, height: 13, background: "var(--accent)", verticalAlign: "middle" }}
+            />
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
 }
 
 const credentials = [
@@ -212,8 +328,10 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Right — credential tags (linked) */}
-            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 7, flex: "0 1 auto" }}>
+            {/* Right — terminal + credential tags */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, flex: "0 1 auto" }}>
+              <TerminalBlock />
+              <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 7 }}>
               {credentials.map((c, i) => (
                 <motion.a
                   key={c.label}
@@ -248,6 +366,7 @@ export default function Hero() {
                   {c.label}
                 </motion.a>
               ))}
+              </div>
             </div>
           </div>
         </motion.div>
