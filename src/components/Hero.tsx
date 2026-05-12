@@ -372,7 +372,7 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll hint */}
+      {/* Scroll hint — vertical, pinned to right edge in the vacant gap */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -380,9 +380,11 @@ export default function Hero() {
         className="hero-scroll-hint"
         style={{
           position: "absolute",
-          bottom: "clamp(48px, 7vw, 80px)",
           right: "clamp(20px, 5vw, 72px)",
+          top: "50%",
+          transform: "translateY(-50%) rotate(90deg)",
           display: "flex", alignItems: "center", gap: 12,
+          transformOrigin: "center center",
         }}
       >
         <span style={{
