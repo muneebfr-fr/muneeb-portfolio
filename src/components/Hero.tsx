@@ -11,7 +11,8 @@ function smoothScrollTo(href: string) {
 const TERMINAL_LINES = [
   { prompt: "$", text: " muneeb.init()", color: "var(--accent)" },
   { prompt: ">", text: " loading profile...", color: "rgba(240,238,232,0.45)" },
-  { prompt: ">", text: " stack: next.js · supabase · python · figma", color: "rgba(240,238,232,0.65)" },
+  { prompt: ">", text: " frontend: next.js · react · typescript · tailwind", color: "rgba(240,238,232,0.65)" },
+  { prompt: ">", text: " backend:  python · supabase · laravel · postgresql", color: "rgba(240,238,232,0.65)" },
   { prompt: ">", text: " deployed: 5 projects, 3 clients", color: "rgba(240,238,232,0.65)" },
   { prompt: ">", text: " managed: AED 13M+", color: "rgba(240,238,232,0.65)" },
   { prompt: ">", text: " status: open to work ✓", color: "#00C2A8" },
